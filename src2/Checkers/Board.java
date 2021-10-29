@@ -117,6 +117,16 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
     }
 
     void gameOver(String str) { //when game is over
+        
+        message.setText("GAME OVER! " + str); //indicates who
+        //Game over message
+        JLabel gameOver = new JLabel();
+        gameOver.setText("GAME OVER! " + str +" Close this window and press 'new game!' for a new start!");
+        gameOver.setVisible(true);
+        JPanel getNames = new JPanel();
+        getNames.setLayout(new BoxLayout(getNames, BoxLayout.PAGE_AXIS));
+        getNames.add(gameOver);
+        JOptionPane.showConfirmDialog(null, gameOver, "GAME OVER", JOptionPane.CLOSED_OPTION,JOptionPane.PLAIN_MESSAGE);
 
         message.setText(str); //indicates who won
         newGame.setEnabled(true); //enables newGame button
