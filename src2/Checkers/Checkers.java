@@ -1,3 +1,5 @@
+package Checkers;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -21,7 +23,7 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
         Board board = new Board();
         game.add(board);
         game.add(board.title);
-        game.add(board.newGame);
+        game.add(board.newGame);    
         game.add(board.howToPlay);
         game.add(board.credits);
         game.add(board.message);

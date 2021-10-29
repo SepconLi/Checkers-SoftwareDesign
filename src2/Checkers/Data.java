@@ -1,3 +1,5 @@
+package Checkers;
+
 import java.util.ArrayList;
 
 class Data { //Data class begins
