@@ -72,26 +72,26 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
     }
 
     public void getPlayersNames(){ //gets players names through JTextField
-
-        JTextField player1Name = new JTextField("Player 1");
-        JTextField player2Name = new JTextField("Player 2");
-
         //creates new JPanel to store the JTextFields
-        JPanel getNames = new JPanel();
-        getNames.setLayout(new BoxLayout(getNames, BoxLayout.PAGE_AXIS));
-        getNames.add(player1Name);
-        getNames.add(player2Name);
 
         //player inputs name through Confirm Dialog
-        int result = JOptionPane.showConfirmDialog(null, getNames, "Enter Your Names!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        Object[] choices = {"White", "Black"};
+        Object defaultChoice = choices[0];
+        int result = JOptionPane.showOptionDialog(this,
+             "Choose your color, Player 1",
+             "Color choice",
+             JOptionPane.YES_NO_OPTION,
+             JOptionPane.QUESTION_MESSAGE,
+             null,
+             choices,
+             defaultChoice);
 
-        
-        if (result == JOptionPane.OK_OPTION) { //if players give names, names are assigned
-            Player1 = player1Name.getText();
-            Player2 = player2Name.getText();
-        } else { //otherwise default names are given
-            Player1 = "Player 1";
-            Player2 = "Player 2";
+        if (result == 0) { //if white is selected
+            Player1 = "White - Player 1";
+            Player2 = "Black - Player 2";
+        } else { // otherwise black is selected
+            Player1 = "White - Player 2";
+            Player2 = "Black - Player 1";
         }
 
     }
