@@ -25,7 +25,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
 
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
-        title.setFont(new Font("Serif", Font.CENTER_BASELINE, 80));
+        title.setFont(new Font("Serif", Font.CENTER_BASELINE, 50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(Color.darkGray);
         howToPlay = new JButton("Rules");
@@ -54,13 +54,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
 
         Object src = evt.getSource();
         if (src == newGame) {//if newGame button is pressed, a new game is created
-            JLabel gameOverLabel = new JLabel();
-            gameOverLabel.setText("GAME OVER! " +" Close this window and press 'new game!' for a new start!");
-            gameOverLabel.setVisible(true);
-            JPanel gameOverPanel = new JPanel();
-            gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.PAGE_AXIS));
-            gameOverPanel.add(gameOverLabel);
-            JOptionPane.showConfirmDialog(null, gameOverPanel, "GAME OVER", JOptionPane.CLOSED_OPTION,JOptionPane.PLAIN_MESSAGE);
+            getPlayersColors();
             NewGame();
         }else if (src == howToPlay) {//if howToPlay button is pressed, instructions pop up
             instructions();
@@ -154,9 +148,9 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 JOptionPane.PLAIN_MESSAGE);
 
         message.setText(str); // indicates who won
-        newGame.setEnabled(true); // enables newGame button
-        howToPlay.setEnabled(true); // enables howToPlayButton
-        credits.setEnabled(true); // enables credits button
+        //newGame.setEnabled(true); // enables newGame button
+        //howToPlay.setEnabled(true); // enables howToPlayButton
+        //credits.setEnabled(true); // enables credits button
         gameInProgress = false; // sets gameInProgress as false, until new game is initialized
 
     }
@@ -280,7 +274,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 selectedCol = legalMoves[0].fromCol;
             }
         }
-
+        if(gameInProgress)
         repaint(); // repaints board
 
     }
@@ -289,7 +283,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
      * paints board
      */
     public void paintComponent(Graphics g) {
-
+        if(gameInProgress){
         // boarder around game board
         g.setColor(new Color(139, 119, 101));
         g.fillRect(0, 0, 648, 648);
@@ -330,7 +324,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 }
             }
         }
-
+    }
         if (gameInProgress) { // if game is in progress
 
             g.setColor(new Color(0, 255, 0));
