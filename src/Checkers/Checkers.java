@@ -4,7 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Checkers extends JFrame { //Checkers class begins, extends on JFrame class
-
+    /**
+    * @author Rodrigo Li
+    * @author Asdrubal Villegas
+    * @author Jorim
+    * @author Axel Matus
+    */
     public static void main (String [] args) { //main method to start the board game
 
         JFrame game = new JFrame(); //creates new frame
@@ -14,7 +19,7 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
         game.getContentPane();
         game.pack();
         game.setSize(1000,1000);
-        game.setResizable(true); //the window is not resizable
+        game.setResizable(true);
         game.setLayout(null);
         game.setVisible(true);
         game.setBackground(new Color(225, 225, 225));

@@ -3,39 +3,43 @@ package Checkers;
 import java.util.ArrayList;
 
 class Data { //Data class begins
-
-    public static final int //declares final ints, representing the state of a square
+    /**
+    * Declares board tiles status values 
+    */
+    public static final int 
     blank = 0,
     player1 = 1,
     playerKing1 = 2,
     player2 = 3,
     playerKing2 = 4;
 
-    private int[][] board; //declares an int array called board
+    private int[][] board; // Declares an int array called board
 
-    public Data() { //Data default constructor
+    public Data() {
 
-        board = new int[8][8]; //creates an 8 by 8 board
-        setUpBoard(); //calls setUpBoard
+        board = new int[8][8]; // creates an 8x8 board
+        setUpBoard(); // Call setUpBoard
 
     }
-
-    public void setUpBoard() { //sets up board
+    /**
+    * Sets up board assigning tiles to players
+    */
+    public void setUpBoard() { 
 
         for (int row = 0; row < 8; row++) {
 
             for (int col = 0; col < 8; col++) {
 
-                if ( row % 2 == col % 2 ) { //for all dark squares
+                if ( row % 2 == col % 2 ) { // for all dark squares
 
-                    if (row < 3) //if in top 3 rows
-                        board[row][col] = player2; //squares are assigned to player 2
-                    else if (row > 4) //if in bottom 3 rows
-                        board[row][col] = player1; //squares are assigned to player 1
-                    else //otherwise, middle rows are empty
+                    if (row < 3) // if in top 3 rows
+                        board[row][col] = player2; // squares are assigned to player 2
+                    else if (row > 4) // if in bottom 3 rows
+                        board[row][col] = player1; // squares are assigned to player 1
+                    else // otherwise, middle rows are empty
                         board[row][col] = blank;
 
-                } else //all light squares are empty
+                } else // and all light squares are empty
                     board[row][col] = blank;
 
             }
@@ -43,65 +47,83 @@ class Data { //Data class begins
         }
 
     }
-
+    /**
+     * Checks what is in the given position tile
+     * @param row X-axis position of the piece to be found
+     * @param col Y-axis position of the piece to be found
+     * @return returns the state of the tile
+     */
     public int pieceAt(int row, int col) { //method that returns pieces' location
 
         return board[row][col];
 
     }
-
-    public void makeMove(movesMade move) { //method that takes in movesMade type and makes a move
+    /**
+     * Method that takes in movesMade type and makes a move
+     * @param move the move to be executed
+     */
+    public void makeMove(movesMade move) {
 
         makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
 
     }
+    /**
+     * Executes a movement of a piece
+     * @param fromRow initial row of the piece
+     * @param fromCol initial column of the piece
+     * @param toRow new row to be moved
+     * @param toCol new column to be moved
+     */
+    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
 
-    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) { //makesMove (in database sense)
+        board[toRow][toCol] = board[fromRow][fromCol]; // piece that was in original square is now in new square
+        board[fromRow][fromCol] = blank; // the original square is now blank
 
-        board[toRow][toCol] = board[fromRow][fromCol]; //piece that was in original square is now in new square
-        board[fromRow][fromCol] = blank; //the original square is now blank
+        if (fromRow - toRow == 2 || fromRow - toRow == -2){ // if a move is a jump
 
-        if (fromRow - toRow == 2 || fromRow - toRow == -2){ //if a move is a jump
-
-            //the player jumps
+            // the player jumps
             int jumpRow = (fromRow + toRow) / 2;
             int jumpCol = (fromCol + toCol) / 2;
-            board[jumpRow][jumpCol] = blank; //the original square is not blank
+            board[jumpRow][jumpCol] = blank; // the original square is not blank
 
         }
 
-        if (toRow == 0 && board[toRow][toCol] == player1){ //if a player 1 piece reaches top row
+        if (toRow == 0 && board[toRow][toCol] == player1){ // if a player 1 piece reaches top row
             board[toRow][toCol] = playerKing1;
         }
 
-        if (toRow == 7 && board[toRow][toCol] == player2){ //if a player 2 piece reaches bottom row
-            board[toRow][toCol] = playerKing2; //it becomes a king
+        if (toRow == 7 && board[toRow][toCol] == player2){ // if a player 2 piece reaches bottom row
+            board[toRow][toCol] = playerKing2; // it becomes a king
         }
     }
+    /**
+     * Determines legal moves for a player
+     * @param player the player to be checked for legal moves
+     * @return an array of moves that the player can execute
+     */
+    public movesMade[] getLegalMoves(int player) { 
 
-    public movesMade[] getLegalMoves(int player) { //determines legal moves for player
-
-        if (player != player1 && player != player2) //if method is not called with a player
-            return null; //null is returned
+        if (player != player1 && player != player2) // if method is not called with a player
+            return null; 
 
         int playerKing;
 
-        //identifies player's kings
+        // identifies player's kings
         if (player == player1){
             playerKing = playerKing1;
         } else {
             playerKing = playerKing2;
         }
 
-        ArrayList moves = new ArrayList(); //creates a new Array to story legal moves
+        ArrayList moves = new ArrayList(); // creates a new Array to story legal moves
 
-        for (int row = 0; row < 8; row++){ //looks through all the squares of the boards
+        for (int row = 0; row < 8; row++){ // looks through all the squares of the boards
 
             for (int col = 0; col < 8; col++){
 
-                if (board[row][col] == player || board[row][col] == playerKing){ //if a square belongs to the player
+                if (board[row][col] == player || board[row][col] == playerKing){ // if a square belongs to the player
 
-                    //check all possible jumps around the piece - if one found the player must jump
+                    // check all possible jumps around the piece - if one found the player must jump
                     if (canJump(player, row, col, row+1, col+1, row+2, col+2))
                         moves.add(new movesMade(row, col, row+2, col+2));
                     if (canJump(player, row, col, row-1, col+1, row-2, col+2))
@@ -117,15 +139,15 @@ class Data { //Data class begins
 
         }
 
-        if (moves.size() == 0){ //if there are no jumps
+        if (moves.size() == 0){ // if there are no jumps
 
-            for (int row = 0; row < 8; row++){ //look through all the squares again
+            for (int row = 0; row < 8; row++){ // look through all the squares again
 
                 for (int col = 0; col < 8; col++){
 
-                    if (board[row][col] == player || board[row][col] == playerKing){ //if a square belongs to the player
+                    if (board[row][col] == player || board[row][col] == playerKing){ // if a square belongs to the player
 
-                        //check all possible normal moves around the piece - if one found, add it to the list
+                        // check all possible normal moves around the piece - if one found, add it to the list
                         if (canMove(player,row,col,row+1,col+1))
                             moves.add(new movesMade(row,col,row+1,col+1));
                         if (canMove(player,row,col,row-1,col+1))
@@ -143,9 +165,9 @@ class Data { //Data class begins
 
         }
 
-        if (moves.size() == 0){ //if there are no normal moves
-            return null; //the player cannot move
-        }else { //otherwise, an array is created to store all the possible moves
+        if (moves.size() == 0){ // if there are no normal moves
+            return null;
+        }else { // otherwise, an array is created to store all the possible moves
             movesMade[] moveArray = new movesMade[moves.size()];
             for (int i = 0; i < moves.size(); i++){
                 moveArray[i] = (movesMade)moves.get(i);
@@ -154,8 +176,14 @@ class Data { //Data class begins
         }
 
     }
-
-    public movesMade[] getLegalJumpsFrom(int player, int row, int col){ //determines legal jumps for player
+    /**
+     * determines legal jumps for player
+     * @param player the player to be checked for legal jumps
+     * @param row the row to be checked
+     * @param col the colum to be checked
+     * @return an array of possible jumps for the given player
+     */
+    public movesMade[] getLegalJumpsFrom(int player, int row, int col){
 
         if (player != player1 && player != player2) //if method is not called with a player
             return null; //null is returned
@@ -195,8 +223,18 @@ class Data { //Data class begins
             return moveArray;
         }
     }
-
-    private boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3){ //method checks for possible jumps
+    /**
+     * method checks for possible jumps (eat an opposition's piece)
+     * @param player the player to be checked for possible jumps
+     * @param r1 initial piece row
+     * @param c1 initial piece column
+     * @param r2 middle piece row
+     * @param c2 middle piece column
+     * @param r3 destination row
+     * @param c3 destination column
+     * @return a boolean to know if the player can possibly jump to the given tiles
+     */
+    private boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3){
 
         if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) //if destination row or column is off board
             return false; //there is no jump, as the destination doesn't exist
@@ -219,8 +257,16 @@ class Data { //Data class begins
         }
 
     }
-
-    private boolean canMove(int player, int r1, int c1, int r2, int c2){ //method checks for possible normal moves
+    /**
+     * method checks for possible normal moves
+     * @param player the player to be checked for the possible move
+     * @param r1 initial row position
+     * @param c1 initial column position
+     * @param r2 destination row position
+     * @param c2 destination column position
+     * @return a boolean if the move can be possibly made by player
+     */
+    private boolean canMove(int player, int r1, int c1, int r2, int c2){ 
 
         if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8) //if destination row or column is off board
             return false; //there is no move, as the destination doesn't exist
