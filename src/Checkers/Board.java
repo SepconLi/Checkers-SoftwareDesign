@@ -40,12 +40,17 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         message.setForeground(Color.darkGray);
         
         board = new Data(); //assigns to new Data class
-        getPlayersNames(); //calls to get players' names
+        getPlayersColors(); //calls to get players' names
         NewGame(); //calls to start a new game
 
     }
 
-    public void actionPerformed(ActionEvent evt) { //implemented from Actions Listener
+    /** 
+     * implemented from Actions Listener, assigns functions to the buttons
+     * @param evt the event that was requested (from the buttons)
+     * 
+    */
+    public void actionPerformed(ActionEvent evt) {
 
         Object src = evt.getSource();
         if (src == newGame) //if newGame button is pressed, a new game is created
@@ -55,8 +60,11 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         else if (src == credits) //if credits button is pressed, credits pop up
             showCredits();
     }
-
-    void NewGame() { //creates new game
+    /**
+     * creates new game
+     * 
+     */
+    void NewGame() {
 
         board.setUpBoard(); //sets up board
         currentPlayer = Data.player1; //indicates its player 1's move
@@ -70,11 +78,11 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         repaint(); //repaints board
 
     }
-
-    public void getPlayersNames(){ //gets players names through JTextField
-        //creates new JPanel to store the JTextFields
-
-        //player inputs name through Confirm Dialog
+    /**
+     * gets players colors through JOptionPane
+     */
+    public void getPlayersColors(){ 
+        // player chooses between white or black
         Object[] choices = {"White", "Black"};
         Object defaultChoice = choices[0];
         int result = JOptionPane.showOptionDialog(this,
@@ -95,10 +103,11 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         }
 
     }
+    /**
+     * when howToPlay button is pressed, instruction Message Dialog appears
+     */
+    void instructions() {
 
-    void instructions() { //when howToPlay button is pressed, instruction Message Dialog appears
-
-        //brief history of Checkers and a link to read the instructions - the link is not clickable
         String intro = "Rules: \n" +
                          "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n" +
                          "* Pieces can only be moved one square diagonally forward, either to the left or right if it's possible. \n" +
@@ -110,15 +119,20 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); //shows message
 
     }
-
-    void showCredits() { //when credits button is pressed, credits Message Dialog appears
+    /**
+     * when credits button is pressed, credits Message Dialog appears
+     */
+    void showCredits() { 
 
         String credits = "ICS3U | Ms. Shaw\n" + "By Toby Thomas\n" + "01/23/14"; //credits of game
         JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); //shows message
 
     }
-
-    void gameOver(String str) { //when game is over
+    /**
+     * when game is over
+     * @param str the string of the game winner
+     */
+    void gameOver(String str) {
         
         message.setText("GAME OVER! " + str); //indicates who
         //Game over message
@@ -137,8 +151,12 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         gameInProgress = false; //sets gameInProgress as false, until new game is initialized
 
     }
-
-    public void mousePressed(MouseEvent evt) { //when the board is clicked
+    /**
+     * When the board is clicked
+     * @param evt event of the mouse being clicked
+     * 
+     */
+    public void mousePressed(MouseEvent evt) {
 
         if (!gameInProgress){ //if game is not in progress
             message.setText("Start a new game."); //indicates to start a new game
@@ -149,8 +167,12 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
                 ClickedSquare(row,col); //calls ClickedSquare
         }
     }
-
-    void ClickedSquare(int row, int col) { //processes legal moves
+    /**
+     * processes legal moves
+     * @param row row to be checked
+     * @param col column to be checked
+     */
+    void ClickedSquare(int row, int col) {
 
         for (int i = 0; i < legalMoves.length; i++){ //runs through all legal moves
             if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) { //if selected piece can be moved
@@ -182,8 +204,11 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         message.setText("Where do you want to move it?");  
 
     }
-
-    void MakeMove(movesMade move) { //moves the piece
+    /**
+     * moves the piece
+     * @param move the movement to be executed
+     */
+    void MakeMove(movesMade move) {
 
         board.makeMove(move); //calls makeMove method in Data class
 
@@ -241,8 +266,10 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
 
     }
 
-
-    public void paintComponent(Graphics g) { //paints board
+    /**
+     * paints board
+     */
+    public void paintComponent(Graphics g) {
 
         //boarder around game board
         g.setColor(new Color(139,119,101));
