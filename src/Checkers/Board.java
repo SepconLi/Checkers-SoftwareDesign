@@ -28,7 +28,7 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 80));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(Color.darkGray);
-        howToPlay = new JButton("Checkers?");
+        howToPlay = new JButton("Rules");
         howToPlay.addActionListener(this);
         newGame = new JButton("New Game");
         newGame.addActionListener(this);
