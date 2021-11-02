@@ -4,26 +4,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class Board extends JPanel implements ActionListener, MouseListener { //Board class beings, extends on JPanel class
+class Board extends JPanel implements ActionListener, MouseListener { // Board class beings, extends on JPanel class
 
-    Data board; //declares new Data class to store the game's information
-    boolean gameInProgress; //boolean to check if game is in progress
-    int currentPlayer; //tracks whose turn it is
-    int selectedRow, selectedCol; //tracks which squares have been selected
-    movesMade[] legalMoves; //declares new movesMade array
-    JLabel title; //title JLabel on frame
-    JButton newGame; //newGame JButton on frame - starts a new game
-    JButton howToPlay; //howToPlay JButton on frame - gives intro to Checkers and how to play
-    JButton credits; //credits JButton on frame - displays credits
-    JLabel message; //message JLabel on frame - indicates whose turn it is
-    String Player1; //first player's name
-    String Player2; //second player's name
+    Data board; // declares new Data class to store the game's information
+    boolean gameInProgress; // boolean to check if game is in progress
+    int currentPlayer; // tracks whose turn it is
+    int selectedRow, selectedCol; // tracks which squares have been selected
+    movesMade[] legalMoves; // declares new movesMade array
+    JLabel title; // title JLabel on frame
+    JButton newGame; // newGame JButton on frame - starts a new game
+    JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
+    JButton credits; // credits JButton on frame - displays credits
+    JLabel message; // message JLabel on frame - indicates whose turn it is
+    String Player1; // first player's name
+    String Player2; // second player's name
 
-    public Board() { //default constructor
+    public Board() { // default constructor
 
-        addMouseListener(this); //implements Mouse Listener
+        addMouseListener(this); // implements Mouse Listener
 
-        //assigns all JLabels and JButtons to their values, as well as styles them
+        // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 80));
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -34,14 +34,14 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         newGame.addActionListener(this);
         credits = new JButton("Credits");
         credits.addActionListener(this);
-        message = new JLabel("",JLabel.CENTER);
-        message.setFont(new  Font("Serif", Font.BOLD, 14));
+        message = new JLabel("", JLabel.CENTER);
+        message.setFont(new Font("Serif", Font.BOLD, 14));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
-        
-        board = new Data(); //assigns to new Data class
-        getPlayersColors(); //calls to get players' names
-        NewGame(); //calls to start a new game
+
+        board = new Data(); // assigns to new Data class
+        getPlayersColors(); // calls to get players' names
+        NewGame(); // calls to start a new game
 
     }
 
@@ -53,48 +53,52 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
     public void actionPerformed(ActionEvent evt) {
 
         Object src = evt.getSource();
-        if (src == newGame) //if newGame button is pressed, a new game is created
+        if (src == newGame) {//if newGame button is pressed, a new game is created
+            JLabel gameOverLabel = new JLabel();
+            gameOverLabel.setText("GAME OVER! " +" Close this window and press 'new game!' for a new start!");
+            gameOverLabel.setVisible(true);
+            JPanel gameOverPanel = new JPanel();
+            gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.PAGE_AXIS));
+            gameOverPanel.add(gameOverLabel);
+            JOptionPane.showConfirmDialog(null, gameOverPanel, "GAME OVER", JOptionPane.CLOSED_OPTION,JOptionPane.PLAIN_MESSAGE);
             NewGame();
-        else if (src == howToPlay) //if howToPlay button is pressed, instructions pop up
+        }else if (src == howToPlay) {//if howToPlay button is pressed, instructions pop up
             instructions();
-        else if (src == credits) //if credits button is pressed, credits pop up
+        }else if (src == credits){ //if credits button is pressed, credits pop up
             showCredits();
+        }
     }
+
     /**
      * creates new game
      * 
      */
     void NewGame() {
 
-        board.setUpBoard(); //sets up board
-        currentPlayer = Data.player1; //indicates its player 1's move
-        legalMoves = board.getLegalMoves(Data.player1); //searches for legal moves
-        selectedRow = -1; //no square is selected
-        message.setText("It's " + Player1 + "'s turn."); //indicates whose turn it is
-        gameInProgress = true; //sets gameInProgress as true
-        newGame.setEnabled(true); //enables newGame button
-        howToPlay.setEnabled(true); //enables howToPlayButton
-        credits.setEnabled(true); //enables credits button
-        repaint(); //repaints board
+        board.setUpBoard(); // sets up board
+        currentPlayer = Data.player1; // indicates its player 1's move
+        legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves
+        selectedRow = -1; // no square is selected
+        message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+        gameInProgress = true; // sets gameInProgress as true
+        newGame.setEnabled(true); // enables newGame button
+        howToPlay.setEnabled(true); // enables howToPlayButton
+        credits.setEnabled(true); // enables credits button
+        repaint(); // repaints board
 
     }
+
     /**
      * gets players colors through JOptionPane
      */
-    public void getPlayersColors(){ 
+    public void getPlayersColors() {
         // player chooses between white or black
-        Object[] choices = {"White", "Black"};
+        Object[] choices = { "White", "Black" };
         Object defaultChoice = choices[0];
-        int result = JOptionPane.showOptionDialog(this,
-             "Choose your color, Player 1",
-             "Color choice",
-             JOptionPane.YES_NO_OPTION,
-             JOptionPane.QUESTION_MESSAGE,
-             null,
-             choices,
-             defaultChoice);
+        int result = JOptionPane.showOptionDialog(this, "Choose your color, Player 1", "Color choice",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, defaultChoice);
 
-        if (result == 0) { //if white is selected
+        if (result == 0) { // if white is selected
             Player1 = "White - Player 1";
             Player2 = "Black - Player 2";
         } else { // otherwise black is selected
@@ -103,166 +107,181 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
         }
 
     }
+
     /**
      * when howToPlay button is pressed, instruction Message Dialog appears
      */
     void instructions() {
 
-        String intro = "Rules: \n" +
-                         "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n" +
-                         "* Pieces can only be moved one square diagonally forward, either to the left or right if it's possible. \n" +
-                         "* When a piece reaches the end of the board, it is crowned. A crowned piece has the option of also moving backwards.\n" +
-                         "* To eliminate an opponent's piece, one of your pieces must be diagonal to it and it must be possible to place your piece behind your opponent's.\n" +
-                         "If these conditions are met, it is mandatory to eliminate your opponent's piece. It is possible to do more than one elimination if it after\n" +
-                         "eliminating one piece meets the same conditions with another, which you will also be obliged to eliminate.";
+        String intro = "Rules: \n"
+                + "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n"
+                + "* Pieces can only be moved one square diagonally forward, either to the left or right if it's possible. \n"
+                + "* When a piece reaches the end of the board, it is crowned. A crowned piece has the option of also moving backwards.\n"
+                + "* To eliminate an opponent's piece, one of your pieces must be diagonal to it and it must be possible to place your piece behind your opponent's.\n"
+                + "If these conditions are met, it is mandatory to eliminate your opponent's piece. It is possible to do more than one elimination if it after\n"
+                + "eliminating one piece meets the same conditions with another, which you will also be obliged to eliminate.";
 
-        JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); //shows message
+        JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); // shows message
 
     }
+
     /**
      * when credits button is pressed, credits Message Dialog appears
      */
-    void showCredits() { 
+    void showCredits() {
 
-        String credits = "ICS3U | Ms. Shaw\n" + "By Toby Thomas\n" + "01/23/14"; //credits of game
-        JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); //shows message
+        String credits = "ICS3U | Ms. Shaw\n" + "By Toby Thomas\n" + "01/23/14"; // credits of game
+        JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); // shows message
 
     }
+
     /**
      * when game is over
+     * 
      * @param str the string of the game winner
      */
     void gameOver(String str) {
-        
-        message.setText("GAME OVER! " + str); //indicates who
-        //Game over message
-        JLabel gameOver = new JLabel();
-        gameOver.setText("GAME OVER! " + str +" Close this window and press 'new game!' for a new start!");
-        gameOver.setVisible(true);
-        JPanel getNames = new JPanel();
-        getNames.setLayout(new BoxLayout(getNames, BoxLayout.PAGE_AXIS));
-        getNames.add(gameOver);
-        JOptionPane.showConfirmDialog(null, gameOver, "GAME OVER", JOptionPane.CLOSED_OPTION,JOptionPane.PLAIN_MESSAGE);
 
-        message.setText(str); //indicates who won
-        newGame.setEnabled(true); //enables newGame button
-        howToPlay.setEnabled(true); //enables howToPlayButton
-        credits.setEnabled(true); //enables credits button
-        gameInProgress = false; //sets gameInProgress as false, until new game is initialized
+        message.setText("GAME OVER! " + str); // indicates who
+        // Game over message
+        JLabel gameOverLabel = new JLabel();
+        gameOverLabel.setText("GAME OVER! " + str + " Close this window and press 'new game!' for a new start!");
+        gameOverLabel.setVisible(true);
+        JPanel gameOverPanel = new JPanel();
+        gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.PAGE_AXIS));
+        gameOverPanel.add(gameOverLabel);
+        JOptionPane.showConfirmDialog(null, gameOverPanel, "GAME OVER", JOptionPane.CLOSED_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        message.setText(str); // indicates who won
+        newGame.setEnabled(true); // enables newGame button
+        howToPlay.setEnabled(true); // enables howToPlayButton
+        credits.setEnabled(true); // enables credits button
+        gameInProgress = false; // sets gameInProgress as false, until new game is initialized
 
     }
+
     /**
      * When the board is clicked
+     * 
      * @param evt event of the mouse being clicked
      * 
      */
     public void mousePressed(MouseEvent evt) {
 
-        if (!gameInProgress){ //if game is not in progress
-            message.setText("Start a new game."); //indicates to start a new game
-        }else { //otherwise, calculates which square was pressed
-            int col = (evt.getX() - 4) / 80; //calculation of square's column
-            int row = (evt.getY() - 4) / 80; //calculation of square's row
-            if (col >= 0 && col < 8 && row >= 0 && row < 8) //if square is on the board
-                ClickedSquare(row,col); //calls ClickedSquare
+        if (!gameInProgress) { // if game is not in progress
+            message.setText("Start a new game."); // indicates to start a new game
+        } else { // otherwise, calculates which square was pressed
+            int col = (evt.getX() - 4) / 80; // calculation of square's column
+            int row = (evt.getY() - 4) / 80; // calculation of square's row
+            if (col >= 0 && col < 8 && row >= 0 && row < 8) // if square is on the board
+                ClickedSquare(row, col); // calls ClickedSquare
         }
     }
+
     /**
      * processes legal moves
+     * 
      * @param row row to be checked
      * @param col column to be checked
      */
     void ClickedSquare(int row, int col) {
 
-        for (int i = 0; i < legalMoves.length; i++){ //runs through all legal moves
-            if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) { //if selected piece can be moved
-                selectedRow = row; //assigns selected row
-                selectedCol = col; //assigns selected column
-                if (currentPlayer == Data.player1) //indicates whose turn it is
+        for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
+            if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) { // if selected piece can be moved
+                selectedRow = row; // assigns selected row
+                selectedCol = col; // assigns selected column
+                if (currentPlayer == Data.player1) // indicates whose turn it is
                     message.setText("It's " + Player1 + "'s turn.");
                 else
                     message.setText("It's " + Player2 + "'s turn.");
-                repaint(); //repaints board
+                repaint(); // repaints board
                 return;
             }
         }
 
-        if (selectedRow < 0) { //if no square is selected
-            message.setText("Select a piece to move."); //indicates player to pick a piece to move
+        if (selectedRow < 0) { // if no square is selected
+            message.setText("Select a piece to move."); // indicates player to pick a piece to move
             return;
         }
 
-        for (int i = 0; i < legalMoves.length; i++){ //runs through all legal moves
-            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol //if already selected piece can move
-                && legalMoves[i].toRow == row && legalMoves[i].toCol == col) { //and the selected piece's destination is legal
-                MakeMove(legalMoves[i]); //make the move
+        for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
+            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol // if already selected
+                                                                                             // piece can move
+                    && legalMoves[i].toRow == row && legalMoves[i].toCol == col) { // and the selected piece's
+                                                                                   // destination is legal
+                MakeMove(legalMoves[i]); // make the move
                 return;
             }
         }
 
-        //when a piece is selected and player clicks elsewhere besides legal destination, program encourages player to move piece
-        message.setText("Where do you want to move it?");  
+        // when a piece is selected and player clicks elsewhere besides legal
+        // destination, program encourages player to move piece
+        message.setText("Where do you want to move it?");
 
     }
+
     /**
      * moves the piece
+     * 
      * @param move the movement to be executed
      */
     void MakeMove(movesMade move) {
 
-        board.makeMove(move); //calls makeMove method in Data class
+        board.makeMove(move); // calls makeMove method in Data class
 
-        if (move.isJump()) { //checks if player must continue jumping
+        if (move.isJump()) { // checks if player must continue jumping
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
-            if (legalMoves != null) { //if player must jump again
+            if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
-                    message.setText(Player1 + ", you must jump."); //indicates that player 1 must jump
+                    message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
                 else
-                    message.setText(Player2 + ", you must jump."); //indicates that player 2 must jump
-                selectedRow = move.toRow; //assigns selected row to destination row
-                selectedCol = move.toCol; //assigns selected column to destination column
-                repaint(); //repaints board
+                    message.setText(Player2 + ", you must jump."); // indicates that player 2 must jump
+                selectedRow = move.toRow; // assigns selected row to destination row
+                selectedCol = move.toCol; // assigns selected column to destination column
+                repaint(); // repaints board
                 return;
             }
         }
 
-        if (currentPlayer == Data.player1) { //if it was player 1's turn
-            currentPlayer = Data.player2; //it's now player 2's
-            legalMoves = board.getLegalMoves(currentPlayer); //gets legal moves for player 2
-            if (legalMoves == null) //if there aren't any moves, player 1 wins
+        if (currentPlayer == Data.player1) { // if it was player 1's turn
+            currentPlayer = Data.player2; // it's now player 2's
+            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 2
+            if (legalMoves == null) // if there aren't any moves, player 1 wins
                 gameOver(Player1 + " wins!");
-            else if (legalMoves[0].isJump()) //if player 2 must jump, it indicates so
+            else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
                 message.setText(Player2 + ", you must jump.");
-            else //otherwise, it indicates it's player 2's turn
+            else // otherwise, it indicates it's player 2's turn
                 message.setText("It's " + Player2 + "'s turn.");
-        } else { //otherwise, if it was player 2's turn
-            currentPlayer = Data.player1; //it's now player 1's turn
-            legalMoves = board.getLegalMoves(currentPlayer); //gets legal moves for player 1
-            if (legalMoves == null) //if there aren't any moves, player 2 wins
+        } else { // otherwise, if it was player 2's turn
+            currentPlayer = Data.player1; // it's now player 1's turn
+            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 1
+            if (legalMoves == null) // if there aren't any moves, player 2 wins
                 gameOver(Player2 + " wins!");
-            else if (legalMoves[0].isJump()) //if player 1 must jump, it indicates so
+            else if (legalMoves[0].isJump()) // if player 1 must jump, it indicates so
                 message.setText(Player1 + ", you must jump.");
-            else //otherwise, it indicates it's player 1's turn
+            else // otherwise, it indicates it's player 1's turn
                 message.setText("It's " + Player1 + "'s turn.");
         }
 
-        selectedRow = -1; //no squares are not selected
+        selectedRow = -1; // no squares are not selected
 
-        if (legalMoves != null) { //if there are legal moves
-            boolean sameFromSquare = true; //declares boolean sameFromSquare
-            for (int i = 1; i < legalMoves.length; i++) //runs through all legal moves
-                if (legalMoves[i].fromRow != legalMoves[0].fromRow //if there are any legal moves besides the selected row
-                        || legalMoves[i].fromCol != legalMoves[0].fromCol) { //and column
-                    sameFromSquare = false; //declares sameFromSquare as false
+        if (legalMoves != null) { // if there are legal moves
+            boolean sameFromSquare = true; // declares boolean sameFromSquare
+            for (int i = 1; i < legalMoves.length; i++) // runs through all legal moves
+                if (legalMoves[i].fromRow != legalMoves[0].fromRow // if there are any legal moves besides the selected
+                                                                   // row
+                        || legalMoves[i].fromCol != legalMoves[0].fromCol) { // and column
+                    sameFromSquare = false; // declares sameFromSquare as false
                     break;
                 }
-            if (sameFromSquare) { //if true, the player's final piece is already selected
+            if (sameFromSquare) { // if true, the player's final piece is already selected
                 selectedRow = legalMoves[0].fromRow;
                 selectedCol = legalMoves[0].fromCol;
             }
         }
 
-        repaint(); //repaints board
+        repaint(); // repaints board
 
     }
 
@@ -271,73 +290,81 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
      */
     public void paintComponent(Graphics g) {
 
-        //boarder around game board
-        g.setColor(new Color(139,119,101));
+        // boarder around game board
+        g.setColor(new Color(139, 119, 101));
         g.fillRect(0, 0, 648, 648);
 
-        //creates checkered effect
+        // creates checkered effect
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
 
-                //paints squares
-                if ( row % 2 == col % 2 )
-                    g.setColor(new Color(139,119,101));
+                // paints squares
+                if (row % 2 == col % 2)
+                    g.setColor(new Color(139, 119, 101));
                 else
-                    g.setColor(new Color(238,203,173));
-                g.fillRect(4 + col*80, 4 + row*80, 80, 80);
+                    g.setColor(new Color(238, 203, 173));
+                g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
 
-                //paints squares with pieces on them
-                switch (board.pieceAt(row,col)) {
-                    case Data.player1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(8 + col*80, 8 + row*80, 72, 72);
-                        break;
-                    case Data.player2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(8 + col*80, 8 + row*80, 72, 72);
-                        break;
-                    case Data.playerKing1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(8 + col*80, 8 + row*80, 72, 72);
-                        g.setColor(Color.white);
-                        g.drawString("K", 54 + col*80, 72 + row*80);
-                        break;
-                    case Data.playerKing2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(8 + col*80, 8 + row*80, 72, 72);
-                        g.setColor(Color.white);
-                        g.drawString("K", 54 + col*80, 72 + row*80);
-                        break;
+                // paints squares with pieces on them
+                switch (board.pieceAt(row, col)) {
+                case Data.player1:
+                    g.setColor(Color.lightGray);
+                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                    break;
+                case Data.player2:
+                    g.setColor(Color.darkGray);
+                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                    break;
+                case Data.playerKing1:
+                    g.setColor(Color.lightGray);
+                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                    g.setColor(Color.white);
+                    g.drawString("K", 54 + col * 80, 72 + row * 80);
+                    break;
+                case Data.playerKing2:
+                    g.setColor(Color.darkGray);
+                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                    g.setColor(Color.white);
+                    g.drawString("K", 54 + col * 80, 72 + row * 80);
+                    break;
                 }
             }
         }
 
-        if (gameInProgress) { //if game is in progress
+        if (gameInProgress) { // if game is in progress
 
-            g.setColor(new Color(0, 255,0));
-            for (int i = 0; i < legalMoves.length; i++) { //runs through all legal move
-                //highlights, in green, all the possible squares the player can move
-                //g.drawRect(2 + legalMoves[i].fromCol*80, 2 + legalMoves[i].fromRow*80, 39, 39);
-                g.drawRect(4 + legalMoves[i].fromCol*80, 4 + legalMoves[i].fromRow*80, 78, 78);
+            g.setColor(new Color(0, 255, 0));
+            for (int i = 0; i < legalMoves.length; i++) { // runs through all legal move
+                // highlights, in green, all the possible squares the player can move
+                // g.drawRect(2 + legalMoves[i].fromCol*80, 2 + legalMoves[i].fromRow*80, 39,
+                // 39);
+                g.drawRect(4 + legalMoves[i].fromCol * 80, 4 + legalMoves[i].fromRow * 80, 78, 78);
             }
 
-            if (selectedRow >= 0){ //if a square is selected
-                g.setColor(Color.white); //the square is highlighted in white
-                g.drawRect(4 + selectedCol*80, 4 + selectedRow*80, 78, 78);
-                g.drawRect(6 + selectedCol*80, 6 + selectedRow*80, 74, 74);
+            if (selectedRow >= 0) { // if a square is selected
+                g.setColor(Color.white); // the square is highlighted in white
+                g.drawRect(4 + selectedCol * 80, 4 + selectedRow * 80, 78, 78);
+                g.drawRect(6 + selectedCol * 80, 6 + selectedRow * 80, 74, 74);
                 g.setColor(Color.green);
-                for (int i = 0; i < legalMoves.length; i++) { //its legal moves are then highlighted in green
+                for (int i = 0; i < legalMoves.length; i++) { // its legal moves are then highlighted in green
                     if (legalMoves[i].fromCol == selectedCol && legalMoves[i].fromRow == selectedRow)
-                        g.drawRect(4 + legalMoves[i].toCol*80, 4 + legalMoves[i].toRow*80, 78, 78);
+                        g.drawRect(4 + legalMoves[i].toCol * 80, 4 + legalMoves[i].toRow * 80, 78, 78);
                 }
             }
         }
     }
 
-    //implements Mouse entered, clicked, released and exited
-    public void mouseEntered(MouseEvent evt) { }
-    public void mouseClicked(MouseEvent evt) { }
-    public void mouseReleased(MouseEvent evt) { }
-    public void mouseExited(MouseEvent evt) { }
+    // implements Mouse entered, clicked, released and exited
+    public void mouseEntered(MouseEvent evt) {
+    }
+
+    public void mouseClicked(MouseEvent evt) {
+    }
+
+    public void mouseReleased(MouseEvent evt) {
+    }
+
+    public void mouseExited(MouseEvent evt) {
+    }
 
 }
