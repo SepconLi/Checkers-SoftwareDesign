@@ -99,11 +99,13 @@ class Board extends JPanel implements ActionListener, MouseListener { //Board cl
     void instructions() { //when howToPlay button is pressed, instruction Message Dialog appears
 
         //brief history of Checkers and a link to read the instructions - the link is not clickable
-        String intro = "Checkers, called Draughts in most countries,\n" +
-                "has been traced back to the 1300s, though it\n" +
-                "may indeed stretch further into history than that.\n" +
-                "These are the standard U.S. rules for Checkers.\n\n"+
-                "Read how to play: http://abt.cm/1d0fHKE";
+        String intro = "Rules: \n" +
+                         "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n" +
+                         "* Pieces can only be moved one square diagonally forward, either to the left or right if it's possible. \n" +
+                         "* When a piece reaches the end of the board, it is crowned. A crowned piece has the option of also moving backwards.\n" +
+                         "* To eliminate an opponent's piece, one of your pieces must be diagonal to it and it must be possible to place your piece behind your opponent's.\n" +
+                         "If these conditions are met, it is mandatory to eliminate your opponent's piece. It is possible to do more than one elimination if it after\n" +
+                         "eliminating one piece meets the same conditions with another, which you will also be obliged to eliminate.";
 
         JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); //shows message
 
