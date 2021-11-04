@@ -124,7 +124,13 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
      */
     void showCredits() {
 
-        String credits = "ICS3U | Ms. Shaw\n" + "By Toby Thomas\n" + "01/23/14"; // credits of game
+        String credits = "Universidad de Costa Rica - CI-0136 - 2021\n"
+        +"Rodrigo Li Qiu B94263\n"
+        + "Jorim G. Wilson Ellis B98615\n"
+        + "Asdrúbal Villegas Molina B88583\n" 
+        + "Axel Matus Vargas B74597\n"
+        + "And also:"
+        + "Toby Thomas\n" + "in 01/23/14"; // credits of game
         JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); // shows message
 
     }
@@ -274,9 +280,10 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 selectedCol = legalMoves[0].fromCol;
             }
         }
-        if(gameInProgress)
-        repaint(); // repaints board
-
+        
+        if(gameInProgress) {
+            repaint(); // repaints board
+        }
     }
 
     /**
