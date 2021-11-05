@@ -7,7 +7,7 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
     /**
     * @author Rodrigo Li
     * @author Asdrubal Villegas
-    * @author Jorim
+    * @author Jorim Wilson
     * @author Axel Matus
     */
     public static void main (String [] args) { //main method to start the board game
