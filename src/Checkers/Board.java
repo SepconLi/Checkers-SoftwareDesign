@@ -1,6 +1,8 @@
 package Checkers;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -86,20 +88,33 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
      * gets players colors through JOptionPane
      */
     public void getPlayersColors() {
-        // player chooses between white or black
-        Object[] choices = { "White", "Black" };
-        Object defaultChoice = choices[0];
-        int result = JOptionPane.showOptionDialog(this, "Choose your color, Player 1", "Color choice",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, choices, defaultChoice);
+        JTextField player1Name = new JTextField("White");
+        JTextField player2Name = new JTextField("Black");
+        JLabel msg = new JLabel("Enter Your Names In Your Desired Color!\n");
+        //creates new JPanel to store the JTextFields
+        JPanel getNames = new JPanel();
+        getNames.setLayout(new BoxLayout(getNames, BoxLayout.PAGE_AXIS));
+        getNames.add(msg);
+        getNames.add(player1Name);
+        getNames.add(player2Name);
 
-        if (result == 0) { // if white is selected
-            Player1 = "White - Player 1";
-            Player2 = "Black - Player 2";
-        } else { // otherwise black is selected
-            Player1 = "White - Player 2";
-            Player2 = "Black - Player 1";
+        //player inputs name through Confirm Dialog
+        int result = JOptionPane.showConfirmDialog(null, getNames, "Names", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        
+        if (result == JOptionPane.OK_OPTION) { //if players give names, names are assigned
+            Player1 = player1Name.getText() + " - White";
+            Player2 = player2Name.getText() + " - Black";
+            if(Player1.compareTo("White - White") == 0) {
+                Player1 = "Player 1 - White";
+            }
+            if(Player2.compareTo("Black - Black") == 0) {
+                Player2 = "Player 2 - Black";
+            }
+        } else { //otherwise default names are given
+            Player1 = "Player 1 - White";
+            Player2 = "Player 2 - Black";
         }
-
     }
 
     /**
