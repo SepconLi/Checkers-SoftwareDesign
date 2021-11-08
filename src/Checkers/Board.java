@@ -2,24 +2,23 @@ package Checkers;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-
 import java.awt.*;
 import java.awt.event.*;
 
 class Board extends JPanel implements ActionListener, MouseListener { // Board class beings, extends on JPanel class
 
-    Data board; // declares new Data class to store the game's information
-    boolean gameInProgress; // boolean to check if game is in progress
-    int currentPlayer; // tracks whose turn it is
-    int selectedRow, selectedCol; // tracks which squares have been selected
-    movesMade[] legalMoves; // declares new movesMade array
-    JLabel title; // title JLabel on frame
-    JButton newGame; // newGame JButton on frame - starts a new game
-    JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
-    JButton credits; // credits JButton on frame - displays credits
-    JLabel message; // message JLabel on frame - indicates whose turn it is
-    String Player1; // first player's name
-    String Player2; // second player's name
+    private Data board; // declares new Data class to store the game's information
+    private boolean gameInProgress; // boolean to check if game is in progress
+    private int currentPlayer; // tracks whose turn it is
+    private int selectedRow, selectedCol; // tracks which squares have been selected
+    private movesMade[] legalMoves; // declares new movesMade array
+    private JLabel title; // title JLabel on frame
+    private JButton newGame; // newGame JButton on frame - starts a new game
+    private JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
+    private JButton credits; // credits JButton on frame - displays credits
+    private JLabel message; // message JLabel on frame - indicates whose turn it is
+    private String Player1; // first player's name
+    private String Player2; // second player's name
 
     public Board() { // default constructor
 
@@ -46,12 +45,12 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
         NewGame(); // calls to start a new game
 
     }
-
+    
     /** 
      * implemented from Actions Listener, assigns functions to the buttons
      * @param evt the event that was requested (from the buttons)
      * 
-    */
+     */
     public void actionPerformed(ActionEvent evt) {
 
         Object src = evt.getSource();
@@ -203,7 +202,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
     void ClickedSquare(int row, int col) {
 
         for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
-            if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) { // if selected piece can be moved
+            if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) { // if selected piece can be moved
                 selectedRow = row; // assigns selected row
                 selectedCol = col; // assigns selected column
                 if (currentPlayer == Data.player1) // indicates whose turn it is
@@ -221,9 +220,9 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
         }
 
         for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
-            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol // if already selected
+            if (legalMoves[i].getFromRow() == selectedRow && legalMoves[i].getFromCol() == selectedCol // if already selected
                                                                                              // piece can move
-                    && legalMoves[i].toRow == row && legalMoves[i].toCol == col) { // and the selected piece's
+                    && legalMoves[i].getToRow() == row && legalMoves[i].getToCol() == col) { // and the selected piece's
                                                                                    // destination is legal
                 MakeMove(legalMoves[i]); // make the move
                 return;
@@ -246,14 +245,14 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
         board.makeMove(move); // calls makeMove method in Data class
 
         if (move.isJump()) { // checks if player must continue jumping
-            legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
+            legalMoves = board.getLegalJumpsFrom(currentPlayer, move.getToRow(), move.getToCol());
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
                     message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
                 else
                     message.setText(Player2 + ", you must jump."); // indicates that player 2 must jump
-                selectedRow = move.toRow; // assigns selected row to destination row
-                selectedCol = move.toCol; // assigns selected column to destination column
+                selectedRow = move.getToRow(); // assigns selected row to destination row
+                selectedCol = move.getToCol(); // assigns selected column to destination column
                 repaint(); // repaints board
                 return;
             }
@@ -284,15 +283,15 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
         if (legalMoves != null) { // if there are legal moves
             boolean sameFromSquare = true; // declares boolean sameFromSquare
             for (int i = 1; i < legalMoves.length; i++) // runs through all legal moves
-                if (legalMoves[i].fromRow != legalMoves[0].fromRow // if there are any legal moves besides the selected
+                if (legalMoves[i].getFromRow() != legalMoves[0].getFromRow() // if there are any legal moves besides the selected
                                                                    // row
-                        || legalMoves[i].fromCol != legalMoves[0].fromCol) { // and column
+                        || legalMoves[i].getFromCol() != legalMoves[0].getFromCol()) { // and column
                     sameFromSquare = false; // declares sameFromSquare as false
                     break;
                 }
             if (sameFromSquare) { // if true, the player's final piece is already selected
-                selectedRow = legalMoves[0].fromRow;
-                selectedCol = legalMoves[0].fromCol;
+                selectedRow = legalMoves[0].getFromRow();
+                selectedCol = legalMoves[0].getFromCol();
             }
         }
         
@@ -354,7 +353,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 // highlights, in green, all the possible squares the player can move
                 // g.drawRect(2 + legalMoves[i].fromCol*80, 2 + legalMoves[i].fromRow*80, 39,
                 // 39);
-                g.drawRect(4 + legalMoves[i].fromCol * 80, 4 + legalMoves[i].fromRow * 80, 78, 78);
+                g.drawRect(4 + legalMoves[i].getFromCol() * 80, 4 + legalMoves[i].getFromRow() * 80, 78, 78);
             }
 
             if (selectedRow >= 0) { // if a square is selected
@@ -363,11 +362,56 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 g.drawRect(6 + selectedCol * 80, 6 + selectedRow * 80, 74, 74);
                 g.setColor(Color.green);
                 for (int i = 0; i < legalMoves.length; i++) { // its legal moves are then highlighted in green
-                    if (legalMoves[i].fromCol == selectedCol && legalMoves[i].fromRow == selectedRow)
-                        g.drawRect(4 + legalMoves[i].toCol * 80, 4 + legalMoves[i].toRow * 80, 78, 78);
+                    if (legalMoves[i].getFromCol() == selectedCol && legalMoves[i].getFromRow() == selectedRow)
+                        g.drawRect(4 + legalMoves[i].getToCol() * 80, 4 + legalMoves[i].getToRow() * 80, 78, 78);
                 }
             }
         }
+    }
+    
+        /** 
+     * getter of the title atribute
+     * @return return the title atribute
+     * 
+     */
+    JLabel getTitle() {
+        return title;
+    }
+    
+    /** 
+     * getter of the title atribute
+     * @return return the title atribute
+     * 
+     */
+    JButton getNewGame() {
+        return newGame;
+    }
+    
+    /** 
+     * getter of the howToPlay atribute
+     * @return return the howToPlay atribute
+     * 
+     */
+    JButton getHowToPlay() {
+        return howToPlay;
+    }
+    
+    /** 
+     * getter of the credits atribute
+     * @return return the credits atribute
+     * 
+     */
+    JButton getCredits() {
+        return credits;
+    }
+
+    /** 
+     * getter of the message atribute
+     * @return return the message atribute
+     * 
+     */
+    JLabel getMessage() {
+        return message;
     }
 
     // implements Mouse entered, clicked, released and exited
