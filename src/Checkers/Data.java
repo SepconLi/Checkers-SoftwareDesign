@@ -21,6 +21,7 @@ class Data { //Data class begins
         setUpBoard(); // Call setUpBoard
 
     }
+    
     /**
     * Sets up board assigning tiles to players
     */
@@ -64,7 +65,7 @@ class Data { //Data class begins
      */
     public void makeMove(movesMade move) {
 
-        makeMove(move.fromRow, move.fromCol, move.toRow, move.toCol);
+        makeMove(move.getFromRow(), move.getFromCol(), move.getToRow(), move.getToCol());
 
     }
     /**
