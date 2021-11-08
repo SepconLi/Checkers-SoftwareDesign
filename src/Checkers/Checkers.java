@@ -27,19 +27,19 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
         //creates new Board and adds its components
         Board board = new Board();
         game.add(board);
-        game.add(board.title);
-        game.add(board.newGame);    
-        game.add(board.howToPlay);
-        game.add(board.credits);
-        game.add(board.message);
+        game.add(board.getTitle());
+        game.add(board.getNewGame());    
+        game.add(board.getHowToPlay());
+        game.add(board.getCredits());
+        game.add(board.getMessage());
 
         //places components on the frame in the correct places
         board.setBounds(0,160,648,648);
-        board.title.setBounds(0,0,360,75);
-        board.newGame.setBounds(6, 120, 150, 30);
-        board.howToPlay.setBounds(162, 120, 100, 30);
-        board.credits.setBounds(268, 120, 100, 30);
-        board.message.setBounds(0, 806, 250, 30);
+        board.getTitle().setBounds(0,0,360,75);
+        board.getNewGame().setBounds(6, 120, 150, 30);
+        board.getHowToPlay().setBounds(162, 120, 100, 30);
+        board.getCredits().setBounds(268, 120, 100, 30);
+        board.getMessage().setBounds(0, 806, 250, 30);
 
     }
 }
