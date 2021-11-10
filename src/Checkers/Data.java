@@ -21,6 +21,10 @@ class Data { //Data class begins
         setUpBoard(); // Call setUpBoard
 
     }
+
+    public int[][] getBoard(){
+        return board;
+    }
     /**
     * Sets up board assigning tiles to players
     */
