@@ -259,6 +259,13 @@ class Data { //Data class begins
 
     }
     /**
+     * 
+     * @return
+     */
+    public int[][] getBoard(){
+        return board;
+    }
+    /**
      * method checks for possible normal moves
      * @param player the player to be checked for the possible move
      * @param r1 initial row position

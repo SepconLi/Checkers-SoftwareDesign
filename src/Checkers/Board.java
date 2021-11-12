@@ -13,6 +13,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private int selectedRow, selectedCol; // tracks which squares have been selected
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
+    private JButton saveGame;
     private JButton newGame; // newGame JButton on frame - starts a new game
     private JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
     private JButton credits; // credits JButton on frame - displays credits
@@ -28,11 +29,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(Color.darkGray);
         howToPlay = new JButton("Rules");
-        //howToPlay.addActionListener(this);
         newGame = new JButton("New Game");
-        //newGame.addActionListener(this);
         credits = new JButton("Credits");
-        //credits.addActionListener(this);
+        saveGame = new JButton("Save Game");
         message = new JLabel("", JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
         message.setHorizontalAlignment(SwingConstants.CENTER);
@@ -80,6 +79,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         return credits;
     }
 
+    JButton getSave() {
+        return saveGame;
+    }
     /** 
      * getter of the message atribute
      * @return return the message atribute
@@ -88,6 +90,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     JLabel getMessage() {
         return message;
     }
+
     
     /** 
      * getter of the message atribute
@@ -98,25 +101,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         return gameInProgress;
     }
     
-    /** 
-     * implemented from Actions Listener, assigns functions to the buttons
-     * @param evt the event that was requested (from the buttons)
-     * 
-     
-    public void actionPerformed(ActionEvent evt) {
-
-        Object src = evt.getSource();
-        if (src == newGame) {//if newGame button is pressed, a new game is created
-            getPlayersColors();
-            NewGame();
-        }else if (src == howToPlay) {//if howToPlay button is pressed, instructions pop up
-            instructions();
-        }else if (src == credits){ //if credits button is pressed, credits pop up
-            showCredits();
-        }
-    }
-    */
-   
     /**
      * creates new game
      * 
@@ -229,25 +213,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     }
 
     /**
-     * When the board is clicked
-     * 
-     * @param evt event of the mouse being clicked
-     * 
-     
-    public void mousePressed(MouseEvent evt) {
-
-        if (!gameInProgress) { // if game is not in progress
-            message.setText("Start a new game."); // indicates to start a new game
-        } else { // otherwise, calculates which square was pressed
-            int col = (evt.getX() - 4) / 80; // calculation of square's column
-            int row = (evt.getY() - 4) / 80; // calculation of square's row
-            if (col >= 0 && col < 8 && row >= 0 && row < 8) // if square is on the board
-                ClickedSquare(row, col); // calls ClickedSquare
-        }
-    }
-    */
-   
-    /**
      * processes legal moves
      * 
      * @param row row to be checked
@@ -353,6 +318,19 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             repaint(); // repaints board
         }
     }
+    //to string board data to save game
+    public String to_String(){
+        String game_info;
+        game_info = currentPlayer + "\n";
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                game_info += board.getBoard()[row][col];
+            }
+            game_info += "\n";
+        }
+        return game_info;
+    }
+    
 
     /**
      * paints board
