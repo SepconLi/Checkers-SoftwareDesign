@@ -265,6 +265,16 @@ class Data { //Data class begins
     public int[][] getBoard(){
         return board;
     }
+
+    public void loadBoard(int[][] loaded){
+
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++){
+                board[row][col] = loaded[row][col];
+            }
+        }
+        
+    }
     /**
      * method checks for possible normal moves
      * @param player the player to be checked for the possible move

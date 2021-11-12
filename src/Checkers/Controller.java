@@ -116,7 +116,22 @@ public class Controller implements ActionListener, MouseListener
         return games;
     }
 
+    public boolean loadGame(String filename){
+        try{
+            int[][] newBoard = new int[8][8];
+            FileReader fr = new FileReader(filename);
+            int currentPlayer = fr.read(); //Valor del jugador que le toca
+            for(int i = 0; i < 8; i++) {
+                for (int k = 0; k < 8; k++) {
+                    newBoard[i][k] = fr.read();
+                }
+            }
+        } catch(Exception e) {
 
+        }
+
+        return true;
+    }
 
     
     public void mouseEntered(MouseEvent evt) {

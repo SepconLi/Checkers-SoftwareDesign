@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+
 
 public class Board extends JPanel{ // Board class beings, extends on JPanel class
 
@@ -14,6 +16,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
     private JButton saveGame;
+    private JButton loadGame;
     private JButton newGame; // newGame JButton on frame - starts a new game
     private JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
     private JButton credits; // credits JButton on frame - displays credits
@@ -32,6 +35,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         newGame = new JButton("New Game");
         credits = new JButton("Credits");
         saveGame = new JButton("Save Game");
+        loadGame = new JButton("Load Game");
         message = new JLabel("", JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
         message.setHorizontalAlignment(SwingConstants.CENTER);
@@ -81,6 +85,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
     JButton getSave() {
         return saveGame;
+    }
+
+    JButton getLoad() {
+        return loadGame;
     }
     /** 
      * getter of the message atribute
@@ -186,6 +194,27 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
     }
 
+    public boolean loadGame(String filename){
+        try{
+            int[][] newBoard = new int[8][8];
+            FileReader fr = new FileReader(filename);
+            currentPlayer = fr.read(); //Valor del jugador que le toca
+            for(int i = 0; i < 8; i++) {
+                for (int k = 0; k < 8; k++) {
+                    newBoard[i][k] = fr.read();
+                }
+            }
+            fr.close();
+        } catch(Exception e) {
+
+        }
+
+        return true;
+    }
+
+    void showGames() {
+        //TODO: Mostrar una lista con los games
+    }
     /**
      * when game is over
      * 
