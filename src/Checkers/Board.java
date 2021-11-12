@@ -5,7 +5,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 
-class Board extends JPanel implements ActionListener, MouseListener { // Board class beings, extends on JPanel class
+public class Board extends JPanel{ // Board class beings, extends on JPanel class
 
     private Data board; // declares new Data class to store the game's information
     private boolean gameInProgress; // boolean to check if game is in progress
@@ -22,19 +22,17 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
 
     public Board() { // default constructor
 
-        addMouseListener(this); // implements Mouse Listener
-
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(Color.darkGray);
         howToPlay = new JButton("Rules");
-        howToPlay.addActionListener(this);
+        //howToPlay.addActionListener(this);
         newGame = new JButton("New Game");
-        newGame.addActionListener(this);
+        //newGame.addActionListener(this);
         credits = new JButton("Credits");
-        credits.addActionListener(this);
+        //credits.addActionListener(this);
         message = new JLabel("", JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
         message.setHorizontalAlignment(SwingConstants.CENTER);
@@ -47,10 +45,64 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
     }
     
     /** 
+     * getter of the title atribute
+     * @return return the title atribute
+     * 
+     */
+    JLabel getTitle() {
+        return title;
+    }
+    
+    /** 
+     * getter of the title atribute
+     * @return return the title atribute
+     * 
+     */
+    JButton getNewGame() {
+        return newGame;
+    }
+    
+    /** 
+     * getter of the howToPlay atribute
+     * @return return the howToPlay atribute
+     * 
+     */
+    JButton getHowToPlay() {
+        return howToPlay;
+    }
+    
+    /** 
+     * getter of the credits atribute
+     * @return return the credits atribute
+     * 
+     */
+    JButton getCredits() {
+        return credits;
+    }
+
+    /** 
+     * getter of the message atribute
+     * @return return the message atribute
+     * 
+     */
+    JLabel getMessage() {
+        return message;
+    }
+    
+    /** 
+     * getter of the message atribute
+     * @return return the message atribute
+     * 
+     */
+    boolean getGameInProgress() {
+        return gameInProgress;
+    }
+    
+    /** 
      * implemented from Actions Listener, assigns functions to the buttons
      * @param evt the event that was requested (from the buttons)
      * 
-     */
+     
     public void actionPerformed(ActionEvent evt) {
 
         Object src = evt.getSource();
@@ -63,7 +115,8 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
             showCredits();
         }
     }
-
+    */
+   
     /**
      * creates new game
      * 
@@ -180,7 +233,7 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
      * 
      * @param evt event of the mouse being clicked
      * 
-     */
+     
     public void mousePressed(MouseEvent evt) {
 
         if (!gameInProgress) { // if game is not in progress
@@ -192,7 +245,8 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
                 ClickedSquare(row, col); // calls ClickedSquare
         }
     }
-
+    */
+   
     /**
      * processes legal moves
      * 
@@ -368,63 +422,4 @@ class Board extends JPanel implements ActionListener, MouseListener { // Board c
             }
         }
     }
-    
-        /** 
-     * getter of the title atribute
-     * @return return the title atribute
-     * 
-     */
-    JLabel getTitle() {
-        return title;
-    }
-    
-    /** 
-     * getter of the title atribute
-     * @return return the title atribute
-     * 
-     */
-    JButton getNewGame() {
-        return newGame;
-    }
-    
-    /** 
-     * getter of the howToPlay atribute
-     * @return return the howToPlay atribute
-     * 
-     */
-    JButton getHowToPlay() {
-        return howToPlay;
-    }
-    
-    /** 
-     * getter of the credits atribute
-     * @return return the credits atribute
-     * 
-     */
-    JButton getCredits() {
-        return credits;
-    }
-
-    /** 
-     * getter of the message atribute
-     * @return return the message atribute
-     * 
-     */
-    JLabel getMessage() {
-        return message;
-    }
-
-    // implements Mouse entered, clicked, released and exited
-    public void mouseEntered(MouseEvent evt) {
-    }
-
-    public void mouseClicked(MouseEvent evt) {
-    }
-
-    public void mouseReleased(MouseEvent evt) {
-    }
-
-    public void mouseExited(MouseEvent evt) {
-    }
-
 }
