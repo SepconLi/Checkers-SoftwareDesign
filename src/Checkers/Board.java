@@ -127,6 +127,23 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
     }
 
+    public void loadGame(int currentPlayer, int[][] board){
+        this.currentPlayer = currentPlayer;
+        this.board.loadBoard(board);
+        legalMoves = this.board.getLegalMoves(Data.player1); // searches for legal moves
+        selectedRow = -1; // no square is selected
+        if(currentPlayer == 1) {
+            message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+        } else {
+            message.setText("It's " + Player2 + "'s turn."); // indicates whose turn it is
+        }
+        gameInProgress = true; // sets gameInProgress as true
+        newGame.setEnabled(true); // enables newGame button
+        howToPlay.setEnabled(true); // enables howToPlayButton
+        credits.setEnabled(true); // enables credits button
+        repaint(); // repaints board
+    }
+
     /**
      * gets players colors through JOptionPane
      */
@@ -191,23 +208,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         + "Toby Thomas\n" + "in 01/23/14"; // credits of game
         JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); // shows message
 
-    }
-
-    public void loadGame(int currentPlayer, int[][] board){
-        this.currentPlayer = currentPlayer;
-        this.board.loadBoard(board);
-        legalMoves = this.board.getLegalMoves(currentPlayer); // searches for legal moves
-        selectedRow = -1; // no square is selected
-        if(currentPlayer == 1) {
-            message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
-        } else {
-            message.setText("It's " + Player2 + "'s turn."); // indicates whose turn it is
-        }
-        gameInProgress = true; // sets gameInProgress as true
-        newGame.setEnabled(true); // enables newGame button
-        howToPlay.setEnabled(true); // enables howToPlayButton
-        credits.setEnabled(true); // enables credits button
-        repaint(); // repaints board
     }
 
     void showGames() {

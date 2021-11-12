@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.*;
+import java.util.*;
 
     /**
      * Write a description of class Controller here.
@@ -56,7 +57,10 @@ public class Controller implements ActionListener, MouseListener
                 System.out.println("Guardadon't");
             }
         } else if (src == board.getLoad()) {
-            loadGame("game_0");
+            String[] file_names = returnSavedGames();
+            int x = JOptionPane.showOptionDialog(null, "Choose game file to load",
+                    "Click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, file_names, file_names[0]);
+            loadGame(file_names[x]);
         }
     }
     
@@ -119,16 +123,41 @@ public class Controller implements ActionListener, MouseListener
         return games;
     }
 
+    public String[] returnSavedGames(){
+        String[] file_names = new String[0];
+        ArrayList<String> myList = new ArrayList<String>(Arrays.asList(file_names));
+
+        try{
+            File f = new File("saved_games.txt");
+            Scanner scanner = new Scanner(f);
+
+            while (scanner.hasNextLine()) {
+                String name = scanner.nextLine();
+                myList.add(name);
+            }
+        } catch(Exception e){
+
+        }
+
+        file_names = myList.toArray(file_names);
+        return file_names;
+    }
+
     public void loadGame(String filename){
         int[][] newBoard = new int[8][8];
         int currentPlayer = -1;
         try{
             FileReader fr = new FileReader(filename);
-            currentPlayer = fr.read();
+            currentPlayer = Character.getNumericValue(fr.read());
+            fr.read();
             for(int i = 0; i < 8; i++) {
                 for (int k = 0; k < 8; k++) {
-                    newBoard[i][k] = fr.read();
+                    int piece = Character.getNumericValue(fr.read());
+                    if(piece != -1){
+                        newBoard[i][k] = piece;
+                    }
                 }
+                fr.read();
             }
             fr.close();
             this.board.loadGame(currentPlayer, newBoard);            
