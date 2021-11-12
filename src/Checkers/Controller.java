@@ -31,6 +31,7 @@ public class Controller implements ActionListener, MouseListener
         board.getNewGame().addActionListener(this);
         board.getCredits().addActionListener(this);
         board.getSave().addActionListener(this);
+        board.getLoad().addActionListener(this);
     }
     
     /** 
@@ -54,6 +55,8 @@ public class Controller implements ActionListener, MouseListener
             } else {
                 System.out.println("Guardadon't");
             }
+        } else if (src == board.getLoad()) {
+            loadGame("game_0");
         }
     }
     
@@ -116,21 +119,22 @@ public class Controller implements ActionListener, MouseListener
         return games;
     }
 
-    public boolean loadGame(String filename){
+    public void loadGame(String filename){
+        int[][] newBoard = new int[8][8];
+        int currentPlayer = -1;
         try{
-            int[][] newBoard = new int[8][8];
             FileReader fr = new FileReader(filename);
-            int currentPlayer = fr.read(); //Valor del jugador que le toca
+            currentPlayer = fr.read();
             for(int i = 0; i < 8; i++) {
                 for (int k = 0; k < 8; k++) {
                     newBoard[i][k] = fr.read();
                 }
             }
+            fr.close();
+            this.board.loadGame(currentPlayer, newBoard);            
         } catch(Exception e) {
 
         }
-
-        return true;
     }
 
     

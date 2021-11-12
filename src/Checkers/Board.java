@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 
 
 public class Board extends JPanel{ // Board class beings, extends on JPanel class
@@ -194,22 +193,21 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
     }
 
-    public boolean loadGame(String filename){
-        try{
-            int[][] newBoard = new int[8][8];
-            FileReader fr = new FileReader(filename);
-            currentPlayer = fr.read(); //Valor del jugador que le toca
-            for(int i = 0; i < 8; i++) {
-                for (int k = 0; k < 8; k++) {
-                    newBoard[i][k] = fr.read();
-                }
-            }
-            fr.close();
-        } catch(Exception e) {
-
+    public void loadGame(int currentPlayer, int[][] board){
+        this.currentPlayer = currentPlayer;
+        this.board.loadBoard(board);
+        legalMoves = this.board.getLegalMoves(currentPlayer); // searches for legal moves
+        selectedRow = -1; // no square is selected
+        if(currentPlayer == 1) {
+            message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+        } else {
+            message.setText("It's " + Player2 + "'s turn."); // indicates whose turn it is
         }
-
-        return true;
+        gameInProgress = true; // sets gameInProgress as true
+        newGame.setEnabled(true); // enables newGame button
+        howToPlay.setEnabled(true); // enables howToPlayButton
+        credits.setEnabled(true); // enables credits button
+        repaint(); // repaints board
     }
 
     void showGames() {
