@@ -29,7 +29,8 @@ class Data { //Data class begins
     * Sets up board assigning tiles to players
     */
     public void setUpBoard() { 
-
+        player1Lost = 0;
+        player2Lost = 0;
         for (int row = 0; row < 8; row++) {
 
             for (int col = 0; col < 8; col++) {
@@ -315,7 +316,8 @@ class Data { //Data class begins
                 board[row][col] = loaded[row][col];
             }
         }
-        
+        this.player1Lost = 12 - getPlayerPieces(player1); // UPDATE
+        this.player2Lost = 12 - getPlayerPieces(player2);
     }
     /**
      * method checks for possible normal moves

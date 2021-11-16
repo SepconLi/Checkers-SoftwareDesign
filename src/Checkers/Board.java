@@ -144,8 +144,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     public void loadGame(int currentPlayer, int[][] board){
         this.currentPlayer = currentPlayer;
         this.board.loadBoard(board);
-        int p1 = 12 - this.board.getPlayerPieces(Data.player1);
-        int p2 = 12 - this.board.getPlayerPieces(Data.player2);
+        int p1 = this.board.getLostPieces(Data.player1);
+        int p2 = this.board.getLostPieces(Data.player2);
         whiteLost.setText("x" + p1);
         blackLost.setText("x" + p2);
         legalMoves = this.board.getLegalMoves(Data.player1); // searches for legal moves
@@ -228,9 +228,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
     }
 
-    void showGames() {
-        //TODO: Mostrar una lista con los games
-    }
     /**
      * when game is over
      * 
@@ -388,46 +385,50 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     public void paintComponent(Graphics g) {
         if(gameInProgress){
         // boarder around game board
-        g.setColor(new Color(139, 119, 101));
-        g.fillRect(0, 0, 648, 648);
-
+            g.setColor(new Color(139, 119, 101));
+            g.fillRect(0, 0, 648, 648);
+            g.setColor(Color.darkGray);
+            g.fillOval(750, 140, 72, 72);
+            g.setColor(Color.lightGray);
+            g.fillOval(750,440,72,72);
         // creates checkered effect
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
 
-                // paints squares
-                if (row % 2 == col % 2)
-                    g.setColor(new Color(139, 119, 101));
-                else
-                    g.setColor(new Color(238, 203, 173));
-                g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
+                    // paints squares
+                    if (row % 2 == col % 2)
+                        g.setColor(new Color(139, 119, 101));
+                    else
+                        g.setColor(new Color(238, 203, 173));
+                    g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
 
-                // paints squares with pieces on them
-                switch (board.pieceAt(row, col)) {
-                case Data.player1:
-                    g.setColor(Color.lightGray);
-                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                    break;
-                case Data.player2:
-                    g.setColor(Color.darkGray);
-                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                    break;
-                case Data.playerKing1:
-                    g.setColor(Color.lightGray);
-                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                    g.setColor(Color.white);
-                    g.drawString("K", 54 + col * 80, 72 + row * 80);
-                    break;
-                case Data.playerKing2:
-                    g.setColor(Color.darkGray);
-                    g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                    g.setColor(Color.white);
-                    g.drawString("K", 54 + col * 80, 72 + row * 80);
-                    break;
+                    // paints squares with pieces on them
+                    switch (board.pieceAt(row, col)) {
+                    case Data.player1:
+                        g.setColor(Color.lightGray);
+                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                        break;
+                    case Data.player2:
+                        g.setColor(Color.darkGray);
+                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                        break;
+                    case Data.playerKing1:
+                        g.setColor(Color.lightGray);
+                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                        g.setColor(Color.white);
+                        g.drawString("K", 54 + col * 80, 72 + row * 80);
+                        break;
+                    case Data.playerKing2:
+                        g.setColor(Color.darkGray);
+                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                        g.setColor(Color.white);
+                        g.drawString("K", 54 + col * 80, 72 + row * 80);
+                        break;
+                    }
                 }
             }
         }
-    }
         if (gameInProgress) { // if game is in progress
 
             g.setColor(new Color(0, 255, 0));
@@ -449,5 +450,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                 }
             }
         }
+        
     }
+    
 }
