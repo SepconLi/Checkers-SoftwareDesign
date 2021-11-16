@@ -14,9 +14,12 @@ class Data { //Data class begins
     playerKing2 = 4;
 
     private int[][] board; // Declares an int array called board
+    private int player1Lost;
+    private int player2Lost;
 
     public Data() {
-
+        player1Lost = 0;
+        player2Lost = 0;
         board = new int[8][8]; // creates an 8x8 board
         setUpBoard(); // Call setUpBoard
 
@@ -60,6 +63,22 @@ class Data { //Data class begins
 
     }
     /**
+     * 
+     * @param player
+     * @return
+     */
+    public int getPlayerPieces(int player) {
+        int total = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int k = 0; k < 8; k++) {
+                if(board[i][k] == player || board[i][k] == (player + 1)) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+    /**
      * Method that takes in movesMade type and makes a move
      * @param move the move to be executed
      */
@@ -85,16 +104,39 @@ class Data { //Data class begins
             // the player jumps
             int jumpRow = (fromRow + toRow) / 2;
             int jumpCol = (fromCol + toCol) / 2;
+
+            if (board[jumpRow][jumpCol] == player1 || board[jumpRow][jumpCol] == playerKing1) {
+                this.player1Lost++;
+
+            } else {
+                if (board[jumpRow][jumpCol] == player2 || board[jumpRow][jumpCol] == playerKing2) {
+                    this.player2Lost++;
+                }
+            }
+                
             board[jumpRow][jumpCol] = blank; // the original square is not blank
+
 
         }
 
         if (toRow == 0 && board[toRow][toCol] == player1){ // if a player 1 piece reaches top row
-            board[toRow][toCol] = playerKing1;
+            board[toRow][toCol] = playerKing1;// it becomes a king
         }
 
         if (toRow == 7 && board[toRow][toCol] == player2){ // if a player 2 piece reaches bottom row
             board[toRow][toCol] = playerKing2; // it becomes a king
+        }
+    }
+    /**
+     * 
+     * @param player
+     * @return
+     */
+    public int getLostPieces(int player) {
+        if(player == 1) {
+            return player1Lost;
+        } else {
+            return player2Lost;
         }
     }
     /**

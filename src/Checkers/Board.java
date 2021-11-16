@@ -14,6 +14,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private int selectedRow, selectedCol; // tracks which squares have been selected
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
+    private JLabel blackLost;
+    private JLabel whiteLost;
     private JButton saveGame;
     private JButton loadGame;
     private JButton newGame; // newGame JButton on frame - starts a new game
@@ -36,6 +38,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         saveGame = new JButton("Save Game");
         loadGame = new JButton("Load Game");
         message = new JLabel("", JLabel.CENTER);
+        blackLost = new JLabel("x0",JLabel.CENTER);
+        whiteLost = new JLabel("x0",JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
@@ -98,7 +102,13 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         return message;
     }
 
-    
+    JLabel getWhite() {
+        return whiteLost;
+    }
+
+    JLabel getBlack() {
+        return blackLost;
+    }
     /** 
      * getter of the message atribute
      * @return return the message atribute
@@ -341,7 +351,12 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             }
         }
         
+        
         if(gameInProgress) {
+            int p1 = board.getLostPieces(Data.player1);
+            int p2 = board.getLostPieces(Data.player2);
+            whiteLost.setText("x" + p1);
+            blackLost.setText("x" + p2);
             repaint(); // repaints board
         }
     }
