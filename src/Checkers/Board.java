@@ -38,9 +38,11 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         saveGame = new JButton("Save Game");
         loadGame = new JButton("Load Game");
         message = new JLabel("", JLabel.CENTER);
-        blackLost = new JLabel("x0",JLabel.CENTER);
-        whiteLost = new JLabel("x0",JLabel.CENTER);
+        blackLost = new JLabel("",JLabel.CENTER);
+        whiteLost = new JLabel("",JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
+        blackLost.setFont(new Font("Serif",Font.BOLD,28));
+        whiteLost.setFont(new Font("Serif",Font.BOLD,28));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
 
@@ -129,6 +131,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves
         selectedRow = -1; // no square is selected
         message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+        blackLost.setText("x0");
+        whiteLost.setText("x0");
         gameInProgress = true; // sets gameInProgress as true
         newGame.setEnabled(true); // enables newGame button
         howToPlay.setEnabled(true); // enables howToPlayButton
@@ -140,6 +144,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     public void loadGame(int currentPlayer, int[][] board){
         this.currentPlayer = currentPlayer;
         this.board.loadBoard(board);
+        int p1 = 12 - this.board.getPlayerPieces(Data.player1);
+        int p2 = 12 - this.board.getPlayerPieces(Data.player2);
+        whiteLost.setText("x" + p1);
+        blackLost.setText("x" + p2);
         legalMoves = this.board.getLegalMoves(Data.player1); // searches for legal moves
         selectedRow = -1; // no square is selected
         if(currentPlayer == 1) {
