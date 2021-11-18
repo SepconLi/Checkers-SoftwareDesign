@@ -13,8 +13,9 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
     public static void main (String [] args) { //main method to start the board game
 
         JFrame game = new JFrame(); //creates new frame
+        // Get the value of the user's screen resolution to fit the game
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int)screenSize.getWidth();
+        int width = (int)screenSize.getWidth(); 
         int height = (int)screenSize.getHeight();
 
         //set the frame's main settings

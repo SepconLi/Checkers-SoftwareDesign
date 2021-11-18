@@ -10,16 +10,12 @@ import java.io.*;
 import java.util.*;
 
     /**
-     * Write a description of class Controller here.
-     * 
-     * @author (your name) 
-     * @version (a version number or a date)
+     * Controls the piece's movements between Data and Visual (Board)
      */
 public class Controller implements ActionListener, MouseListener
 {
-    // instance variables - replace the example below with your own
     private Board board;
-    private static final String GAMES_PATH = "saved_games.txt"; //quité el src/
+    private static final String GAMES_PATH = "saved_games.txt"; 
     private static final String BASE_PATH = "game_";
     /**
      * Constructor for objects of class Controller
@@ -81,8 +77,12 @@ public class Controller implements ActionListener, MouseListener
                 board.ClickedSquare(row, col); // calls ClickedSquare
         }
     }
-
-    public boolean save_game(Board game_info){//partida abstracta?para cargar el juego podríamos crear un new Board y le metemos la matriz de data del archivo
+    /**
+     * Saves the current game
+     * @param game_info the board's current status
+     * @return a success value of the save function
+     */
+    public boolean save_game(Board game_info){
         try {
             String filename = get_filename();
             System.out.println(filename);
@@ -98,14 +98,20 @@ public class Controller implements ActionListener, MouseListener
             return false;
         }
     }
-
+    /**
+     * Generates a filename for a game to be saved
+     * @return The filename to be used for the saved game
+     */
     public String get_filename(){
         String saving_name;
         int saved_games = get_number_of_game();
         saving_name = BASE_PATH + saved_games++;
         return saving_name;
     }
-
+    /**
+     * Gets the number of the game to be saved
+     * @return the game's number according to the saved_games.txt
+     */
     public int get_number_of_game(){
         int games = 0;
         BufferedReader buff = null;
@@ -122,7 +128,10 @@ public class Controller implements ActionListener, MouseListener
         }
         return games;
     }
-
+    /**
+     * Gets the list of saved games
+     * @return a list of saved games
+     */
     public String[] returnSavedGames(){
         String[] file_names = new String[0];
         ArrayList<String> myList = new ArrayList<String>(Arrays.asList(file_names));
@@ -142,7 +151,10 @@ public class Controller implements ActionListener, MouseListener
         file_names = myList.toArray(file_names);
         return file_names;
     }
-
+    /**
+     * Loads a saved game
+     * @param filename the game to be loaded
+     */
     public void loadGame(String filename){
         int[][] newBoard = new int[8][8];
         int currentPlayer = -1;

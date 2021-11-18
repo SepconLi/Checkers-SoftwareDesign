@@ -129,9 +129,9 @@ class Data { //Data class begins
         }
     }
     /**
-     * 
-     * @param player
-     * @return
+     * Gets the lost pieces of the given player
+     * @param player the desired player to know about his lost pieces
+     * @return the lost pieces of the player
      */
     public int getLostPieces(int player) {
         if(player == 1) {
@@ -302,13 +302,16 @@ class Data { //Data class begins
 
     }
     /**
-     * 
-     * @return
+     * Returns the board's current status
+     * @return the board's status
      */
     public int[][] getBoard(){
         return board;
     }
-
+    /**
+     * Loads a new board to the current board
+     * @param loaded the board to be loaded
+     */
     public void loadBoard(int[][] loaded){
 
         for (int row = 0; row < 8; row++) {

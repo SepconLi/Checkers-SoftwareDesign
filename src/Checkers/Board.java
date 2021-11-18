@@ -14,10 +14,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private int selectedRow, selectedCol; // tracks which squares have been selected
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
-    private JLabel blackLost;
-    private JLabel whiteLost;
-    private JButton saveGame;
-    private JButton loadGame;
+    private JLabel blackLost; // Lost BLack Pieces
+    private JLabel whiteLost; // Lost White Pieces
+    private JButton saveGame; // Button to save the game
+    private JButton loadGame; // Button to load games
     private JButton newGame; // newGame JButton on frame - starts a new game
     private JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
     private JButton credits; // credits JButton on frame - displays credits
@@ -87,11 +87,17 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     JButton getCredits() {
         return credits;
     }
-
+    /**
+     * gets the save attribute
+     * @return the save attribute
+     */
     JButton getSave() {
         return saveGame;
     }
-
+    /**
+     * gets the load attribute
+     * @return the load attribute
+     */
     JButton getLoad() {
         return loadGame;
     }
@@ -103,11 +109,17 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     JLabel getMessage() {
         return message;
     }
-
+    /**
+     * gets the lost white piece's attributes
+     * @return the lost white piece's attributes
+     */
     JLabel getWhite() {
         return whiteLost;
     }
-
+    /**
+     * gets the lost black piece's attributes
+     * @return the black piece's attributes
+     */
     JLabel getBlack() {
         return blackLost;
     }
@@ -140,7 +152,11 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         repaint(); // repaints board
 
     }
-
+    /**
+     * Loads a saved game
+     * @param currentPlayer The current player's turn on the saved game
+     * @param board The status of the board of the saved game
+     */
     public void loadGame(int currentPlayer, int[][] board){
         this.currentPlayer = currentPlayer;
         this.board.loadBoard(board);
@@ -365,7 +381,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             repaint(); // repaints board
         }
     }
-    //to string board data to save game
+    /**
+     * To string board to save game
+     * @return the current game status board
+     */
     public String to_String(){
         String game_info;
         game_info = currentPlayer + "\n";
