@@ -7,4 +7,4 @@ Axel Matus B74597
 ## Instructions to compile and execute  
 `cd src`  
 `javac Checkers/*.java`  
-`java Checkers.Checkers`  
+`java Checkers.Checkers` 
