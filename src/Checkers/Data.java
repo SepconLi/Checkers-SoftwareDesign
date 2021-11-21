@@ -23,8 +23,6 @@ class Data { //Data class begins
         board = new int[8][8]; // creates an 8x8 board
         setUpBoard(); // Call setUpBoard
 
-    }
-    
     /**
     * Sets up board assigning tiles to players
     */
