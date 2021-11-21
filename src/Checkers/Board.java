@@ -22,8 +22,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private JLabel message; // message JLabel on frame - indicates whose turn it is
     private String Player1; // first player's name
     private String Player2; // second player's name
-    private int[][] board;
-    private Controller control;
+    private int[][] board; // matrix that represents the board
+    private Controller control; // controller 
 
     public Board() { // default constructor
 
@@ -55,7 +55,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the title atribute
      * 
      */
-    JLabel getTitle() {
+    public JLabel getTitle() {
         return title;
     }
     
@@ -64,7 +64,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the title atribute
      * 
      */
-    JButton getNewGame() {
+    public JButton getNewGame() {
         return newGame;
     }
     
@@ -73,7 +73,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the howToPlay atribute
      * 
      */
-    JButton getHowToPlay() {
+    public JButton getHowToPlay() {
         return howToPlay;
     }
     
@@ -82,21 +82,21 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the credits atribute
      * 
      */
-    JButton getCredits() {
+    public JButton getCredits() {
         return credits;
     }
     /**
      * gets the save attribute
      * @return the save attribute
      */
-    JButton getSave() {
+    public JButton getSave() {
         return saveGame;
     }
     /**
      * gets the load attribute
      * @return the load attribute
      */
-    JButton getLoad() {
+    public JButton getLoad() {
         return loadGame;
     }
     /** 
@@ -104,21 +104,21 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the message atribute
      * 
      */
-    JLabel getMessage() {
+    public JLabel getMessage() {
         return message;
     }
     /**
      * gets the lost white piece's attributes
      * @return the lost white piece's attributes
      */
-    JLabel getWhite() {
+    public JLabel getWhite() {
         return whiteLost;
     }
     /**
      * gets the lost black piece's attributes
      * @return the black piece's attributes
      */
-    JLabel getBlack() {
+    public JLabel getBlack() {
         return blackLost;
     }
     /** 
@@ -126,7 +126,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the message atribute
      * 
      */
-    boolean getGameInProgress() {
+    public boolean getGameInProgress() {
         return gameInProgress;
     }
     
@@ -134,7 +134,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * creates new game
      * 
      */
-    public void NewGame(int[][] newBoard, Controller control) {
+    public void newGame(int[][] newBoard, Controller control) {
         this.control = control;
         board = newBoard;
         currentPlayer = Data.player1; // indicates its player 1's move
@@ -148,8 +148,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         howToPlay.setEnabled(true); // enables howToPlayButton
         credits.setEnabled(true); // enables credits button
         repaint(); // repaints board
-
     }
+    
     /**
      * Loads a saved game
      * @param currentPlayer The current player's turn on the saved game
@@ -210,7 +210,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     /**
      * when howToPlay button is pressed, instruction Message Dialog appears
      */
-    void instructions() {
+    public void instructions() {
 
         String intro = "Rules: \n"
                 + "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n"
@@ -227,7 +227,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     /**
      * when credits button is pressed, credits Message Dialog appears
      */
-    void showCredits() {
+    public void showCredits() {
 
         String credits = "Universidad de Costa Rica - CI-0136 - 2021\n"
         +"Rodrigo Li Qiu B94263\n"
@@ -245,7 +245,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * 
      * @param str the string of the game winner
      */
-    void gameOver(String str) {
+    public void gameOver(String str) {
 
         message.setText("GAME OVER! " + str); // indicates who
         // Game over message
@@ -272,7 +272,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @param row row to be checked
      * @param col column to be checked
      */
-    void ClickedSquare(int row, int col) {
+    public void clickedSquare(int row, int col) {
 
         for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
             if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) { // if selected piece can be moved
@@ -297,7 +297,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                                                                                              // piece can move
                     && legalMoves[i].getToRow() == row && legalMoves[i].getToCol() == col) { // and the selected piece's
                                                                                    // destination is legal
-                MakeMove(legalMoves[i]); // make the move
+                makeMove(legalMoves[i]); // make the move
                 return;
             }
         }
@@ -313,7 +313,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * 
      * @param move the movement to be executed
      */
-    void MakeMove(movesMade move) {
+    public void makeMove(movesMade move) {
 
         board = control.makeMove(move);
 
