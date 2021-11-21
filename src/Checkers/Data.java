@@ -22,7 +22,7 @@ class Data { //Data class begins
         player2Lost = 0;
         board = new int[8][8]; // creates an 8x8 board
         setUpBoard(); // Call setUpBoard
-
+    }
     /**
     * Sets up board assigning tiles to players
     */

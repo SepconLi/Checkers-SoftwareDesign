@@ -210,6 +210,7 @@ public class Controller implements ActionListener, MouseListener
                 fr.read();
             }
             fr.close();
+            data.loadBoard(newBoard);
             this.board.loadGame(currentPlayer, newBoard);
         } catch(Exception e) {
 
