@@ -85,7 +85,7 @@ public class Controller implements ActionListener, MouseListener
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
             board.showCredits();
         }else if (src == board.getSave()) {
-            if(save_game(board)) {
+            if(saveGame(board)) {
                 System.out.println("Guardado");
             } else {
                 System.out.println("Guardadon't");
@@ -120,12 +120,12 @@ public class Controller implements ActionListener, MouseListener
      * @param game_info the board's current status
      * @return a success value of the save function
      */
-    public boolean save_game(Board game_info){
+    public boolean saveGame(Board game_info){
         try {
-            String filename = get_filename();
+            String filename = getFilename();
             System.out.println(filename);
             FileWriter fw = new FileWriter(filename);
-            fw.write(game_info.to_String());
+            fw.write(game_info.toString());
             fw.close();
             fw = new FileWriter(GAMES_PATH, true);
             fw.write(filename + "\n");
@@ -140,9 +140,9 @@ public class Controller implements ActionListener, MouseListener
      * Generates a filename for a game to be saved
      * @return The filename to be used for the saved game
      */
-    public String get_filename(){
+    public String getFilename(){
         String saving_name;
-        int saved_games = get_number_of_game();
+        int saved_games = getNumberOfGame();
         saving_name = BASE_PATH + saved_games++;
         return saving_name;
     }
@@ -150,7 +150,7 @@ public class Controller implements ActionListener, MouseListener
      * Gets the number of the game to be saved
      * @return the game's number according to the saved_games.txt
      */
-    public int get_number_of_game(){
+    public int getNumberOfGame(){
         int games = 0;
         BufferedReader buff = null;
         try {
