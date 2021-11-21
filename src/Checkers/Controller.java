@@ -37,21 +37,16 @@ public class Controller implements ActionListener, MouseListener
         data.setUpBoard();
         table = data.getBoard();
 
-        NewGame();
+        newGame();
     }
 
-    private void NewGame() {
-
-        board.NewGame(table,this);
-
+    private void newGame() {
+        board.newGame(table,this);
     }
     
     public int[][] makeMove(movesMade move) {
-
         data.makeMove(move);
-        
         return data.getBoard();
-
     }
     public int[][] getBoard() {
         return data.getBoard();
@@ -79,7 +74,7 @@ public class Controller implements ActionListener, MouseListener
         if (src == board.getNewGame()) {//if newGame button is pressed, a new game is created
             board.getPlayersColors();
             data.setUpBoard();
-            board.NewGame(data.getBoard(),this);
+            board.newGame(data.getBoard(),this);
         }else if (src == board.getHowToPlay()) {//if howToPlay button is pressed, instructions pop up
             board.instructions();
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
