@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 public class Board extends JPanel{ // Board class beings, extends on JPanel class
 
-    private Data board; // declares new Data class to store the game's information
+
     private boolean gameInProgress; // boolean to check if game is in progress
     private int currentPlayer; // tracks whose turn it is
     private int selectedRow, selectedCol; // tracks which squares have been selected
@@ -24,6 +24,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private JLabel message; // message JLabel on frame - indicates whose turn it is
     private String Player1; // first player's name
     private String Player2; // second player's name
+    private int[][] board;
+    private Controller control;
 
     public Board() { // default constructor
 
@@ -46,9 +48,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
 
-        board = new Data(); // assigns to new Data class
         getPlayersColors(); // calls to get players' names
-        NewGame(); // calls to start a new game
 
     }
     
@@ -136,11 +136,11 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * creates new game
      * 
      */
-    void NewGame() {
-
-        board.setUpBoard(); // sets up board
+    public void NewGame(int[][] newBoard, Controller control) {
+        this.control = control;
+        board = newBoard;
         currentPlayer = Data.player1; // indicates its player 1's move
-        legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves
+        legalMoves = control.getMovesFrom(Data.player1);
         selectedRow = -1; // no square is selected
         message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
         blackLost.setText("x0");
@@ -156,15 +156,16 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * Loads a saved game
      * @param currentPlayer The current player's turn on the saved game
      * @param board The status of the board of the saved game
+     * @param moves
+     * @param lostp1
+     * @param lostp2
      */
     public void loadGame(int currentPlayer, int[][] board){
         this.currentPlayer = currentPlayer;
-        this.board.loadBoard(board);
-        int p1 = this.board.getLostPieces(Data.player1);
-        int p2 = this.board.getLostPieces(Data.player2);
-        whiteLost.setText("x" + p1);
-        blackLost.setText("x" + p2);
-        legalMoves = this.board.getLegalMoves(Data.player1); // searches for legal moves
+        this.board = board;
+        whiteLost.setText("x" + control.getLostPiecesFrom(Data.player1));
+        blackLost.setText("x" + control.getLostPiecesFrom(Data.player2));
+        legalMoves = control.getMovesFrom(currentPlayer); // searches for legal moves
         selectedRow = -1; // no square is selected
         if(currentPlayer == 1) {
             message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
@@ -319,10 +320,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      */
     void MakeMove(movesMade move) {
 
-        board.makeMove(move); // calls makeMove method in Data class
+        board = control.makeMove(move);
 
         if (move.isJump()) { // checks if player must continue jumping
-            legalMoves = board.getLegalJumpsFrom(currentPlayer, move.getToRow(), move.getToCol());
+            legalMoves = control.getJumpsFrom(currentPlayer, move.getToRow(), move.getFromCol()); //getLegalJumps
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
                     message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
@@ -337,7 +338,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
         if (currentPlayer == Data.player1) { // if it was player 1's turn
             currentPlayer = Data.player2; // it's now player 2's
-            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 2
+            legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 2
             if (legalMoves == null) // if there aren't any moves, player 1 wins
                 gameOver(Player1 + " wins!");
             else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
@@ -346,7 +347,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                 message.setText("It's " + Player2 + "'s turn.");
         } else { // otherwise, if it was player 2's turn
             currentPlayer = Data.player1; // it's now player 1's turn
-            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 1
+            legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 1
             if (legalMoves == null) // if there aren't any moves, player 2 wins
                 gameOver(Player2 + " wins!");
             else if (legalMoves[0].isJump()) // if player 1 must jump, it indicates so
@@ -374,8 +375,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         
         
         if(gameInProgress) {
-            int p1 = board.getLostPieces(Data.player1);
-            int p2 = board.getLostPieces(Data.player2);
+            int p1 = control.getLostPiecesFrom(Data.player1);
+            int p2 = control.getLostPiecesFrom(Data.player2);
             whiteLost.setText("x" + p1);
             blackLost.setText("x" + p2);
             repaint(); // repaints board
@@ -390,7 +391,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         game_info = currentPlayer + "\n";
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                game_info += board.getBoard()[row][col];
+                game_info += board[row][col];
             }
             game_info += "\n";
         }
@@ -423,7 +424,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                     g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
 
                     // paints squares with pieces on them
-                    switch (board.pieceAt(row, col)) {
+                    switch (board[row][col]) {
                     case Data.player1:
                         g.setColor(Color.lightGray);
                         g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);

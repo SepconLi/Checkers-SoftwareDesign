@@ -32,25 +32,18 @@ class Data { //Data class begins
         player1Lost = 0;
         player2Lost = 0;
         for (int row = 0; row < 8; row++) {
-
             for (int col = 0; col < 8; col++) {
-
                 if ( row % 2 == col % 2 ) { // for all dark squares
-
                     if (row < 3) // if in top 3 rows
                         board[row][col] = player2; // squares are assigned to player 2
                     else if (row > 4) // if in bottom 3 rows
                         board[row][col] = player1; // squares are assigned to player 1
                     else // otherwise, middle rows are empty
                         board[row][col] = blank;
-
                 } else // and all light squares are empty
                     board[row][col] = blank;
-
             }
-
         }
-
     }
     /**
      * Checks what is in the given position tile
@@ -146,9 +139,9 @@ class Data { //Data class begins
      * @return an array of moves that the player can execute
      */
     public movesMade[] getLegalMoves(int player) { 
-
-        if (player != player1 && player != player2) // if method is not called with a player
+        if (player != player1 && player != player2){ // if method is not called with a player
             return null; 
+        }
 
         int playerKing;
 

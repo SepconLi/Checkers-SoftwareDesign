@@ -15,22 +15,59 @@ import java.util.*;
 public class Controller implements ActionListener, MouseListener
 {
     private Board board;
+    private Data data;
+    private int[][] table;
     private static final String GAMES_PATH = "saved_games.txt"; 
     private static final String BASE_PATH = "game_";
+    public Controller(){}
     /**
      * Constructor for objects of class Controller
      */
     public Controller(Board newBoard)
     {
         board = newBoard;
+        data = new Data();
         board.addMouseListener(this); // implements Mouse Listener
         board.getHowToPlay().addActionListener(this);
         board.getNewGame().addActionListener(this);
         board.getCredits().addActionListener(this);
         board.getSave().addActionListener(this);
         board.getLoad().addActionListener(this);
+
+        data.setUpBoard();
+        table = data.getBoard();
+
+        NewGame();
+    }
+
+    private void NewGame() {
+
+        board.NewGame(table,this);
+
     }
     
+    public int[][] makeMove(movesMade move) {
+
+        data.makeMove(move);
+        
+        return data.getBoard();
+
+    }
+    public int[][] getBoard() {
+        return data.getBoard();
+    }
+
+    public movesMade[] getMovesFrom(int player) {
+        movesMade[] result = data.getLegalMoves(player);
+        return result;
+    }
+
+    public movesMade[] getJumpsFrom(int player,int row, int col) {
+        return data.getLegalJumpsFrom(player, row, col);
+    }
+    public int getLostPiecesFrom(int player) {
+        return data.getLostPieces(player);
+    }
     /** 
      * implemented from Actions Listener, assigns functions to the buttons
      * @param evt the event that was requested (from the buttons)
@@ -41,7 +78,8 @@ public class Controller implements ActionListener, MouseListener
         Object src = evt.getSource();
         if (src == board.getNewGame()) {//if newGame button is pressed, a new game is created
             board.getPlayersColors();
-            board.NewGame();
+            data.setUpBoard();
+            board.NewGame(data.getBoard(),this);
         }else if (src == board.getHowToPlay()) {//if howToPlay button is pressed, instructions pop up
             board.instructions();
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
@@ -172,7 +210,7 @@ public class Controller implements ActionListener, MouseListener
                 fr.read();
             }
             fr.close();
-            this.board.loadGame(currentPlayer, newBoard);            
+            this.board.loadGame(currentPlayer, newBoard);
         } catch(Exception e) {
 
         }
