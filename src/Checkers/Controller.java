@@ -112,7 +112,7 @@ public class Controller implements ActionListener, MouseListener
             int col = (evt.getX() - 4) / 80; // calculation of square's column
             int row = (evt.getY() - 4) / 80; // calculation of square's row
             if (col >= 0 && col < 8 && row >= 0 && row < 8) // if square is on the board
-                board.ClickedSquare(row, col); // calls ClickedSquare
+                board.clickedSquare(row, col); // calls ClickedSquare
         }
     }
     /**
