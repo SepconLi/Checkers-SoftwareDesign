@@ -318,7 +318,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         board = control.makeMove(move);
 
         if (move.isJump()) { // checks if player must continue jumping
-            legalMoves = control.getJumpsFrom(currentPlayer, move.getToRow(), move.getFromCol()); //getLegalJumps
+            legalMoves = control.getJumpsFrom(currentPlayer, move.getToRow(), move.getToCol()); //getLegalJumps
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
                     message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
