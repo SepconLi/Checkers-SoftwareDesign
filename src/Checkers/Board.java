@@ -1,9 +1,8 @@
 package Checkers;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.*;
+
 
 
 public class Board extends JPanel{ // Board class beings, extends on JPanel class
@@ -210,17 +209,10 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     /**
      * when howToPlay button is pressed, instruction Message Dialog appears
      */
-    public void instructions() {
+    public void instructions(String instructions) {
 
-        String intro = "Rules: \n"
-                + "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n"
-                + "* Pieces can only be moved one square diagonally forward, either to the left or right if it's possible. \n"
-                + "* When a piece reaches the end of the board, it is crowned. A crowned piece has the option of also moving backwards.\n"
-                + "* To eliminate an opponent's piece, one of your pieces must be diagonal to it and it must be possible to place your piece behind your opponent's.\n"
-                + "If these conditions are met, it is mandatory to eliminate your opponent's piece. It is possible to do more than one elimination if it after\n"
-                + "eliminating one piece meets the same conditions with another, which you will also be obliged to eliminate.";
 
-        JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); // shows message
+        JOptionPane.showMessageDialog(null, instructions, "What is Checkers", JOptionPane.PLAIN_MESSAGE); // shows message
 
     }
 
@@ -235,7 +227,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         + "Asdrúbal Villegas Molina B88583\n" 
         + "Axel Matus Vargas B74597\n"
         + "And also:"
-        + "Toby Thomas\n" + "in 01/23/14"; // credits of game
+        + "Toby Thomas\n" + "in 01/23/14"; // credits of game-
         JOptionPane.showMessageDialog(null, credits, "Credits", JOptionPane.PLAIN_MESSAGE); // shows message
 
     }

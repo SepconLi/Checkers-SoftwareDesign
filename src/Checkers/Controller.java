@@ -76,7 +76,7 @@ public class Controller implements ActionListener, MouseListener
             data.setUpBoard();
             board.newGame(data.getBoard(),this);
         }else if (src == board.getHowToPlay()) {//if howToPlay button is pressed, instructions pop up
-            board.instructions();
+            board.instructions(Data.CHECKERS_INSTRUCTIONS);
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
             board.showCredits();
         }else if (src == board.getSave()) {
