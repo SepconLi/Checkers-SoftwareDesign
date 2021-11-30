@@ -15,22 +15,54 @@ import java.util.*;
 public class Controller implements ActionListener, MouseListener
 {
     private Board board;
+    private Data data;
+    private int[][] table;
     private static final String GAMES_PATH = "saved_games.txt"; 
     private static final String BASE_PATH = "game_";
+    public Controller(){}
     /**
      * Constructor for objects of class Controller
      */
     public Controller(Board newBoard)
     {
         board = newBoard;
+        data = new Data();
         board.addMouseListener(this); // implements Mouse Listener
         board.getHowToPlay().addActionListener(this);
         board.getNewGame().addActionListener(this);
         board.getCredits().addActionListener(this);
         board.getSave().addActionListener(this);
         board.getLoad().addActionListener(this);
+
+        data.setUpBoard();
+        table = data.getBoard();
+
+        newGame();
+    }
+
+    private void newGame() {
+        board.newGame(table,this);
     }
     
+    public int[][] makeMove(movesMade move) {
+        data.makeMove(move);
+        return data.getBoard();
+    }
+    public int[][] getBoard() {
+        return data.getBoard();
+    }
+
+    public movesMade[] getMovesFrom(int player) {
+        movesMade[] result = data.getLegalMoves(player);
+        return result;
+    }
+
+    public movesMade[] getJumpsFrom(int player,int row, int col) {
+        return data.getLegalJumpsFrom(player, row, col);
+    }
+    public int getLostPiecesFrom(int player) {
+        return data.getLostPieces(player);
+    }
     /** 
      * implemented from Actions Listener, assigns functions to the buttons
      * @param evt the event that was requested (from the buttons)
@@ -41,13 +73,14 @@ public class Controller implements ActionListener, MouseListener
         Object src = evt.getSource();
         if (src == board.getNewGame()) {//if newGame button is pressed, a new game is created
             board.getPlayersColors();
-            board.NewGame();
+            data.setUpBoard();
+            board.newGame(data.getBoard(),this);
         }else if (src == board.getHowToPlay()) {//if howToPlay button is pressed, instructions pop up
             board.instructions();
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
             board.showCredits();
         }else if (src == board.getSave()) {
-            if(save_game(board)) {
+            if(saveGame(board)) {
                 System.out.println("Guardado");
             } else {
                 System.out.println("Guardadon't");
@@ -74,7 +107,7 @@ public class Controller implements ActionListener, MouseListener
             int col = (evt.getX() - 4) / 80; // calculation of square's column
             int row = (evt.getY() - 4) / 80; // calculation of square's row
             if (col >= 0 && col < 8 && row >= 0 && row < 8) // if square is on the board
-                board.ClickedSquare(row, col); // calls ClickedSquare
+                board.clickedSquare(row, col); // calls ClickedSquare
         }
     }
     /**
@@ -82,12 +115,12 @@ public class Controller implements ActionListener, MouseListener
      * @param game_info the board's current status
      * @return a success value of the save function
      */
-    public boolean save_game(Board game_info){
+    public boolean saveGame(Board game_info){
         try {
-            String filename = get_filename();
+            String filename = getFilename();
             System.out.println(filename);
             FileWriter fw = new FileWriter(filename);
-            fw.write(game_info.to_String());
+            fw.write(game_info.toString());
             fw.close();
             fw = new FileWriter(GAMES_PATH, true);
             fw.write(filename + "\n");
@@ -102,9 +135,9 @@ public class Controller implements ActionListener, MouseListener
      * Generates a filename for a game to be saved
      * @return The filename to be used for the saved game
      */
-    public String get_filename(){
+    public String getFilename(){
         String saving_name;
-        int saved_games = get_number_of_game();
+        int saved_games = getNumberOfGame();
         saving_name = BASE_PATH + saved_games++;
         return saving_name;
     }
@@ -112,7 +145,7 @@ public class Controller implements ActionListener, MouseListener
      * Gets the number of the game to be saved
      * @return the game's number according to the saved_games.txt
      */
-    public int get_number_of_game(){
+    public int getNumberOfGame(){
         int games = 0;
         BufferedReader buff = null;
         try {
@@ -172,7 +205,8 @@ public class Controller implements ActionListener, MouseListener
                 fr.read();
             }
             fr.close();
-            this.board.loadGame(currentPlayer, newBoard);            
+            data.loadBoard(newBoard);
+            this.board.loadGame(currentPlayer, newBoard);
         } catch(Exception e) {
 
         }

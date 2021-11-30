@@ -42,7 +42,7 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
         game.add(board.getBlack());
         
         //places components on the frame in the correct places
-        board.setBounds(width/4,40,900,900);
+        board.setBounds(width/5,40,900,900);
         board.getTitle().setBounds(0,40,360,75);
         board.getMessage().setBounds(20, 120, 250, 30);
         board.getBlack().setBounds(1300,180,120,60);
@@ -53,8 +53,7 @@ public class Checkers extends JFrame { //Checkers class begins, extends on JFram
         board.getHowToPlay().setBounds(50, 300, 100, 30);
         board.getCredits().setBounds(50, 340, 100, 30);
 
-
-        Controller controller = new Controller(board);
+        Controller control = new Controller(board);
 
     }
 }

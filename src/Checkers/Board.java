@@ -4,32 +4,9 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.*;
 
-
-class Board extends JPanel implements ActionListener, MouseListener { // Board class beings, extends on JPanel class
-
-    Data board; // declares new Data class to store the game's information
-    boolean gameInProgress; // boolean to check if game is in progress
-    int currentPlayer; // tracks whose turn it is
-    int selectedRow, selectedCol; // tracks which squares have been selected
-    movesMade[] legalMoves; // declares new movesMade array
-    JLabel title; // title JLabel on frame
-    JButton newGame; // newGame JButton on frame - starts a new game
-    JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
-    JButton credits; // credits JButton on frame - displays credits
-    JButton saveGame;
-    JLabel message; // message JLabel on frame - indicates whose turn it is
-    String Player1; // first player's name
-    String Player2; // second player's name
-    private static final String GAMES_PATH = "saved_games.txt"; //quité el src/
-    private static final String BASE_PATH = "game_";
 
 public class Board extends JPanel{ // Board class beings, extends on JPanel class
-
-    private Data board; // declares new Data class to store the game's information
     private boolean gameInProgress; // boolean to check if game is in progress
     private int currentPlayer; // tracks whose turn it is
     private int selectedRow, selectedCol; // tracks which squares have been selected
@@ -45,6 +22,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private JLabel message; // message JLabel on frame - indicates whose turn it is
     private String Player1; // first player's name
     private String Player2; // second player's name
+    private int[][] board; // matrix that represents the board
+    private Controller control; // controller 
 
     public Board() { // default constructor
 
@@ -67,9 +46,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
 
-        board = new Data(); // assigns to new Data class
         getPlayersColors(); // calls to get players' names
-        NewGame(); // calls to start a new game
 
     }
     
@@ -78,7 +55,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the title atribute
      * 
      */
-    JLabel getTitle() {
+    public JLabel getTitle() {
         return title;
     }
     
@@ -87,7 +64,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the title atribute
      * 
      */
-    JButton getNewGame() {
+    public JButton getNewGame() {
         return newGame;
     }
     
@@ -96,7 +73,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the howToPlay atribute
      * 
      */
-    JButton getHowToPlay() {
+    public JButton getHowToPlay() {
         return howToPlay;
     }
     
@@ -105,21 +82,21 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the credits atribute
      * 
      */
-    JButton getCredits() {
+    public JButton getCredits() {
         return credits;
     }
     /**
      * gets the save attribute
      * @return the save attribute
      */
-    JButton getSave() {
+    public JButton getSave() {
         return saveGame;
     }
     /**
      * gets the load attribute
      * @return the load attribute
      */
-    JButton getLoad() {
+    public JButton getLoad() {
         return loadGame;
     }
     /** 
@@ -127,21 +104,21 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the message atribute
      * 
      */
-    JLabel getMessage() {
+    public JLabel getMessage() {
         return message;
     }
     /**
      * gets the lost white piece's attributes
      * @return the lost white piece's attributes
      */
-    JLabel getWhite() {
+    public JLabel getWhite() {
         return whiteLost;
     }
     /**
      * gets the lost black piece's attributes
      * @return the black piece's attributes
      */
-    JLabel getBlack() {
+    public JLabel getBlack() {
         return blackLost;
     }
     /** 
@@ -149,7 +126,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @return return the message atribute
      * 
      */
-    boolean getGameInProgress() {
+    public boolean getGameInProgress() {
         return gameInProgress;
     }
     
@@ -157,11 +134,11 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * creates new game
      * 
      */
-    void NewGame() {
-
-        board.setUpBoard(); // sets up board
+    public void newGame(int[][] newBoard, Controller control) {
+        this.control = control;
+        board = newBoard;
         currentPlayer = Data.player1; // indicates its player 1's move
-        legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves
+        legalMoves = control.getMovesFrom(Data.player1);
         selectedRow = -1; // no square is selected
         message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
         blackLost.setText("x0");
@@ -171,21 +148,19 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         howToPlay.setEnabled(true); // enables howToPlayButton
         credits.setEnabled(true); // enables credits button
         repaint(); // repaints board
-
     }
+    
     /**
      * Loads a saved game
      * @param currentPlayer The current player's turn on the saved game
      * @param board The status of the board of the saved game
      */
-    public void loadGame(int currentPlayer, int[][] board){
+    public void loadGame(int currentPlayer, int[][] newBoard){
         this.currentPlayer = currentPlayer;
-        this.board.loadBoard(board);
-        int p1 = this.board.getLostPieces(Data.player1);
-        int p2 = this.board.getLostPieces(Data.player2);
-        whiteLost.setText("x" + p1);
-        blackLost.setText("x" + p2);
-        legalMoves = this.board.getLegalMoves(Data.player1); // searches for legal moves
+        this.board = newBoard;
+        whiteLost.setText("x" + control.getLostPiecesFrom(Data.player1));
+        blackLost.setText("x" + control.getLostPiecesFrom(Data.player2));
+        legalMoves = control.getMovesFrom(currentPlayer); // searches for legal moves
         selectedRow = -1; // no square is selected
         if(currentPlayer == 1) {
             message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
@@ -197,60 +172,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         howToPlay.setEnabled(true); // enables howToPlayButton
         credits.setEnabled(true); // enables credits button
         repaint(); // repaints board
-    }
-
-    public boolean save_game(Board game_info){//partida abstracta?para cargar el juego podríamos crear un new Board y le metemos la matriz de data del archivo
-        try {
-            String filename = get_filename();
-            System.out.println(filename);
-            FileWriter fw = new FileWriter(filename);
-            fw.write(game_info.to_String());
-            fw.close();
-            fw = new FileWriter(GAMES_PATH, true);
-            fw.write(filename + "\n");
-            fw.close();
-            return true;
-        } catch (Exception e) {
-            //TODO: handle exception
-            return false;
-        }
-    }
-
-    public String get_filename(){
-        String saving_name;
-        int saved_games = get_number_of_game();
-        saving_name = BASE_PATH + saved_games++;
-        return saving_name;
-    }
-
-    public int get_number_of_game(){
-        int games = 0;
-        BufferedReader buff = null;
-        try {
-            buff = new BufferedReader(new FileReader(GAMES_PATH));
-            while((buff.readLine()) != null){
-                games++;
-            }
-            buff.close();
-            
-        } catch (Exception e) {
-            //TODO: handle exception
-            System.out.println("ERROR READING FILE");
-        }
-        return games;
-    }
-
-    //to string board data to save game
-    public String to_String(){
-        String game_info;
-        game_info = currentPlayer + "\n";
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                game_info += board.getBoard()[row][col];
-            }
-            game_info += "\n";
-        }
-        return game_info;
     }
 
     /**
@@ -289,7 +210,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     /**
      * when howToPlay button is pressed, instruction Message Dialog appears
      */
-    void instructions() {
+    public void instructions() {
 
         String intro = "Rules: \n"
                 + "* Each player has a total of 12 pieces, the first player to eliminate all the opponent's pieces is the winner.\n"
@@ -306,7 +227,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     /**
      * when credits button is pressed, credits Message Dialog appears
      */
-    void showCredits() {
+    public void showCredits() {
 
         String credits = "Universidad de Costa Rica - CI-0136 - 2021\n"
         +"Rodrigo Li Qiu B94263\n"
@@ -324,7 +245,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * 
      * @param str the string of the game winner
      */
-    void gameOver(String str) {
+    public void gameOver(String str) {
 
         message.setText("GAME OVER! " + str); // indicates who
         // Game over message
@@ -351,7 +272,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @param row row to be checked
      * @param col column to be checked
      */
-    void ClickedSquare(int row, int col) {
+    public void clickedSquare(int row, int col) {
 
         for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
             if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) { // if selected piece can be moved
@@ -376,7 +297,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                                                                                              // piece can move
                     && legalMoves[i].getToRow() == row && legalMoves[i].getToCol() == col) { // and the selected piece's
                                                                                    // destination is legal
-                MakeMove(legalMoves[i]); // make the move
+                makeMove(legalMoves[i]); // make the move
                 return;
             }
         }
@@ -392,12 +313,12 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * 
      * @param move the movement to be executed
      */
-    void MakeMove(movesMade move) {
+    public void makeMove(movesMade move) {
 
-        board.makeMove(move); // calls makeMove method in Data class
+        board = control.makeMove(move);
 
         if (move.isJump()) { // checks if player must continue jumping
-            legalMoves = board.getLegalJumpsFrom(currentPlayer, move.getToRow(), move.getToCol());
+            legalMoves = control.getJumpsFrom(currentPlayer, move.getToRow(), move.getToCol()); //getLegalJumps
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
                     message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
@@ -412,7 +333,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
         if (currentPlayer == Data.player1) { // if it was player 1's turn
             currentPlayer = Data.player2; // it's now player 2's
-            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 2
+            legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 2
             if (legalMoves == null) // if there aren't any moves, player 1 wins
                 gameOver(Player1 + " wins!");
             else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
@@ -421,7 +342,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                 message.setText("It's " + Player2 + "'s turn.");
         } else { // otherwise, if it was player 2's turn
             currentPlayer = Data.player1; // it's now player 1's turn
-            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 1
+            legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 1
             if (legalMoves == null) // if there aren't any moves, player 2 wins
                 gameOver(Player2 + " wins!");
             else if (legalMoves[0].isJump()) // if player 1 must jump, it indicates so
@@ -449,8 +370,8 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         
         
         if(gameInProgress) {
-            int p1 = board.getLostPieces(Data.player1);
-            int p2 = board.getLostPieces(Data.player2);
+            int p1 = control.getLostPiecesFrom(Data.player1);
+            int p2 = control.getLostPiecesFrom(Data.player2);
             whiteLost.setText("x" + p1);
             blackLost.setText("x" + p2);
             repaint(); // repaints board
@@ -460,12 +381,12 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * To string board to save game
      * @return the current game status board
      */
-    public String to_String(){
+    public String toString(){
         String game_info;
         game_info = currentPlayer + "\n";
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                game_info += board.getBoard()[row][col];
+                game_info += board[row][col];
             }
             game_info += "\n";
         }
@@ -498,7 +419,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                     g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
 
                     // paints squares with pieces on them
-                    switch (board.pieceAt(row, col)) {
+                    switch (board[row][col]) {
                     case Data.player1:
                         g.setColor(Color.lightGray);
                         g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
