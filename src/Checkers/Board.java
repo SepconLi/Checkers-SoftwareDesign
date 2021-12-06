@@ -40,7 +40,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         blackLost = new JLabel("",JLabel.CENTER);
         whiteLost = new JLabel("",JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
-        blackLost.setFont(new Font("Serif",Font.BOLD,28));
+        blackLost.setFont(new Font("Serif",Font.BOLD,28))
         whiteLost.setFont(new Font("Serif",Font.BOLD,28));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);

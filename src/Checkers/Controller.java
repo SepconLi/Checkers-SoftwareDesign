@@ -39,27 +39,52 @@ public class Controller implements ActionListener, MouseListener
 
         newGame();
     }
-
+    /**
+     * Creates a new game in board and creates a connection with this instance
+     */
     private void newGame() {
         board.newGame(table,this);
     }
-    
+    /**
+     * Executes a move in the board
+     * @param move The move to be executed
+     * @return The new board
+     */
     public int[][] makeMove(movesMade move) {
         data.makeMove(move);
         return data.getBoard();
     }
+    /**
+     * Returns the actual board state
+     * @return The board
+     */
     public int[][] getBoard() {
         return data.getBoard();
     }
-
+    /**
+     * Gets the possible moves of a player
+     * @param player the player to be checked for possible moves
+     * @return An array of possible moves
+     */
     public movesMade[] getMovesFrom(int player) {
         movesMade[] result = data.getLegalMoves(player);
         return result;
     }
-
+    /**
+     * Checks if there are any legal jumps to be executed by a player
+     * @param player The player to be checked
+     * @param row The row of the piece to be checked
+     * @param col The col of the piece to be checked
+     * @return A possible array of legal jumps
+     */
     public movesMade[] getJumpsFrom(int player,int row, int col) {
         return data.getLegalJumpsFrom(player, row, col);
     }
+    /**
+     * Gets the lost pieces of a player
+     * @param player The player to be checked
+     * @return The pieces that the given player has lost
+     */
     public int getLostPiecesFrom(int player) {
         return data.getLostPieces(player);
     }
