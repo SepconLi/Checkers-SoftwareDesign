@@ -225,7 +225,6 @@ class Data { //Data class begins
             }
 
         }
-        System.out.println(moves.size());
         if (moves.size() == 0){ // if there are no jumps
 
             for (int row = 0; row < 8; row++){ // look through all the squares again

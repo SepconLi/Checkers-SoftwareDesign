@@ -20,18 +20,11 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
     private JButton credits; // credits JButton on frame - displays credits
     private JLabel message; // message JLabel on frame - indicates whose turn it is
-    private String Player1; // first player's name
-    private String Player2; // second player's name
+    private Player[] players; // second player's name
     private Pieces[][] board; // matrix that represents the board
     private Controller control; // controller 
 
     public Board() { // default constructor
-        System.out.println("Bob construye");
-        // assigns all JLabels and JButtons to their values, as well as styles them
-        this.board = new Pieces[8][8];
-        if(board != null){
-            System.out.println("Bob construyó");
-        }
         
         title = new JLabel("Checkers!");
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 50));
@@ -50,9 +43,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         whiteLost.setFont(new Font("Serif",Font.BOLD,28));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
-
-        getPlayersColors(); // calls to get players' names
-
+        players = new Player[2];
+        getPlayersColors();
+        
     }
     
     /** 
@@ -140,22 +133,16 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * 
      */
     public void newGame(Pieces[][] newBoard, Controller control) {
+
         this.control = control;
+
         board = newBoard;//falla porque newBoard no existe
-        for (int i = 0; i < 8; i++) {
-            for (int k = 0; k < 8; k++) {
-                if(board[i][k] != null) {
-                    System.out.print(board[i][k].getColor());
-                }else{
-                    System.out.print("0");
-                }
-            }
-            System.out.println();
-        }
+
+        
         currentPlayer = Data.player1; // indicates its player 1's move
         legalMoves = control.getMovesFrom(Data.player1);
         selectedRow = -1; // no square is selected
-        message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+        message.setText("It's " + players[0].getName() + "'s turn."); // indicates whose turn it is
         blackLost.setText("x0");
         whiteLost.setText("x0");
         gameInProgress = true; // sets gameInProgress as true
@@ -178,9 +165,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         legalMoves = control.getMovesFrom(currentPlayer); // searches for legal moves
         selectedRow = -1; // no square is selected
         if(currentPlayer == 1) {
-            message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
+            message.setText("It's " + players[0].getName() + "'s turn."); // indicates whose turn it is
         } else {
-            message.setText("It's " + Player2 + "'s turn."); // indicates whose turn it is
+            message.setText("It's " + players[1].getName() + "'s turn."); // indicates whose turn it is
         }
         gameInProgress = true; // sets gameInProgress as true
         newGame.setEnabled(true); // enables newGame button
@@ -206,19 +193,13 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         //player inputs name through Confirm Dialog
         int result = JOptionPane.showConfirmDialog(null, getNames, "Names", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        
         if (result == JOptionPane.OK_OPTION) { //if players give names, names are assigned
-            Player1 = player1Name.getText() + " - White";
-            Player2 = player2Name.getText() + " - Black";
-            if(Player1.compareTo("White - White") == 0) {
-                Player1 = "Player 1 - White";
-            }
-            if(Player2.compareTo("Black - Black") == 0) {
-                Player2 = "Player 2 - Black";
-            }
-        } else { //otherwise default names are given
-            Player1 = "Player 1 - White";
-            Player2 = "Player 2 - Black";
+            players[0] = new Player(player1Name.getText(),"White",1);
+            players[1] = new Player(player2Name.getText(),"Black",2);
+        } else {
+            players[0] = new Player("White","White",1);
+            players[1] = new Player("Black","Black",2);
+            
         }
     }
 
@@ -290,9 +271,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                 selectedRow = row; // assigns selected row
                 selectedCol = col; // assigns selected column
                 if (currentPlayer == Data.player1) // indicates whose turn it is
-                    message.setText("It's " + Player1 + "'s turn.");
+                    message.setText("It's " + players[0].getName() + "'s turn.");
                 else
-                    message.setText("It's " + Player2 + "'s turn.");
+                    message.setText("It's " + players[1].getName() + "'s turn.");
                 repaint(); // repaints board
                 return;
             }
@@ -338,9 +319,9 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             legalMoves = control.getJumpsFrom(currentPlayer, move.getToRow(), move.getToCol()); //getLegalJumps
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
-                    message.setText(Player1 + ", you must jump."); // indicates that player 1 must jump
+                    message.setText(players[0].getName() + ", you must jump."); // indicates that player 1 must jump
                 else
-                    message.setText(Player2 + ", you must jump."); // indicates that player 2 must jump
+                    message.setText(players[1].getName() + ", you must jump."); // indicates that player 2 must jump
                 selectedRow = move.getToRow(); // assigns selected row to destination row
                 selectedCol = move.getToCol(); // assigns selected column to destination column
                 repaint(); // repaints board
@@ -352,20 +333,20 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             currentPlayer = Data.player2; // it's now player 2's
             legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 2
             if (legalMoves == null) // if there aren't any moves, player 1 wins
-                gameOver(Player1 + " wins!");
+                gameOver(players[0].getName() + " wins!");
             else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
-                message.setText(Player2 + ", you must jump.");
+                message.setText(players[1].getName() + ", you must jump.");
             else // otherwise, it indicates it's player 2's turn
-                message.setText("It's " + Player2 + "'s turn.");
+                message.setText("It's " + players[1].getName() + "'s turn.");
         } else { // otherwise, if it was player 2's turn
             currentPlayer = Data.player1; // it's now player 1's turn
             legalMoves = control.getMovesFrom(currentPlayer); // gets legal moves for player 1
             if (legalMoves == null) // if there aren't any moves, player 2 wins
-                gameOver(Player2 + " wins!");
+                gameOver(players[1].getName() + " wins!");
             else if (legalMoves[0].isJump()) // if player 1 must jump, it indicates so
-                message.setText(Player1 + ", you must jump.");
+                message.setText(players[0].getName() + ", you must jump.");
             else // otherwise, it indicates it's player 1's turn
-                message.setText("It's " + Player1 + "'s turn.");
+                message.setText("It's " + players[0].getName() + "'s turn.");
         }
 
         selectedRow = -1; // no squares are not selected
@@ -443,7 +424,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
 
                     // paints squares with pieces on them
                     int color = 0;
-                    if(board[row][col] == null){//no reconoce los legalMoves bien
+                    if(board[row][col].getColor() == 0){ //no reconoce los legalMoves bien
                         color = 0;
                     }else{
                         color = board[row][col].getColor();

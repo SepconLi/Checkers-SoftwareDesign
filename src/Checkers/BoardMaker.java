@@ -6,9 +6,6 @@ abstract class BoardMaker{
     //Clase abstracta de tipos de tablero
     Pieces[][] board;
 
-    public BoardMaker(){
-        generateBoard();
-    }
 
     abstract void generateBoard();
 
@@ -19,4 +16,6 @@ abstract class BoardMaker{
     public Pieces getPieces(int row, int col){
         return this.board[row][col];
     }
+
+    abstract int getNoOfPlayers();
 }

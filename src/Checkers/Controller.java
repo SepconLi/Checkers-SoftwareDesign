@@ -15,6 +15,7 @@ import java.util.*;
 public class Controller implements ActionListener, MouseListener
 {
     private Board board;
+    private BoardMaker boardType;
     private Data data;
     private Pieces[][] table;
     private static final String GAMES_PATH = "saved_games.txt"; 
@@ -25,6 +26,11 @@ public class Controller implements ActionListener, MouseListener
      */
     public Controller(Board newBoard)
     {
+        // DEFAULT TABLE SELECTOR
+        boardType = new CheckersBoard(); //Checkers table
+        table = boardType.getBoard();
+        // END OF DEFAULT TABLE SELECTOR
+
         board = newBoard;
         data = new Data();
         board.addMouseListener(this); // implements Mouse Listener
@@ -34,8 +40,6 @@ public class Controller implements ActionListener, MouseListener
         board.getSave().addActionListener(this);
         board.getLoad().addActionListener(this);
 
-        //data.setUpBoard();
-        table = data.getBoard();
         newGame();
         
         /*
@@ -52,28 +56,57 @@ public class Controller implements ActionListener, MouseListener
 
         
     }
-
+    public int getNoOfPlayers() {
+        return boardType.getNoOfPlayers();
+    }
+    
+    /**
+     * 
+     */
     private void newGame() {
         board.newGame(table,this);
     }
-    
+    /**
+     * 
+     * @param move
+     * @return
+     */
     public Pieces[][] makeMove(movesMade move) {
         data.makeMove(move);
         return data.getBoard();
     }
+    /**
+     * 
+     * @return
+     */
     public Pieces[][] getBoard() {
         return data.getBoard();
     }
-
+    /**
+     * 
+     * @param player
+     * @return
+     */
     public movesMade[] getMovesFrom(int player) {
         movesMade[] result = data.getLegalMoves(player);
         //System.out.println(result.length);
         return result;
     }
-
+    /**
+     * 
+     * @param player
+     * @param row
+     * @param col
+     * @return
+     */
     public movesMade[] getJumpsFrom(int player,int row, int col) {
         return data.getLegalJumpsFrom(player, row, col);
     }
+    /**
+     * 
+     * @param player
+     * @return
+     */
     public int getLostPiecesFrom(int player) {
         return data.getLostPieces(player);
     }
