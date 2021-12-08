@@ -1,5 +1,4 @@
 package Checkers;
-
 import java.util.ArrayList;
 
 class Data { //Data class begins
@@ -49,10 +48,10 @@ class Data { //Data class begins
                         pieces_board[row][col] = new CheckersPiece(player1, row, col);
                     else // otherwise, middle rows are empty
                         //players_board[row][col] = blank;
-                        pieces_board[row][col] = null;
+                        pieces_board[row][col] = new CheckersPiece(blank, row, col);;
                 } else // and all light squares are empty
                     //players_board[row][col] = blank;
-                    pieces_board[row][col] = null;
+                    pieces_board[row][col] = new CheckersPiece(blank, row, col);;
             }
         }
         //System.out.println("Lo hago setup");
@@ -111,12 +110,12 @@ class Data { //Data class begins
      * @param toRow new row to be moved
      * @param toCol new column to be moved
      */
-    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {//aquí muevo piece?
+    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {//aquÃ­ muevo piece?
 
         //players_board[toRow][toCol] = players_board[fromRow][fromCol]; // piece that was in original square is now in new square
         //players_board[fromRow][fromCol] = blank; // the original square is now blank
         pieces_board[toRow][toCol] = pieces_board[fromRow][fromCol]; // piece that was in original square is now in new square
-        pieces_board[fromRow][fromCol] = null; // the original square is now blank(ocupamos algo para esto) no sé si sirve
+        pieces_board[fromRow][fromCol] = new CheckersPiece(blank, fromRow, fromCol); // the original square is now blank(ocupamos algo para esto) no sÃ© si sirve
 
         if (fromRow - toRow == 2 || fromRow - toRow == -2){ // if a move is a jump
 
@@ -134,7 +133,7 @@ class Data { //Data class begins
             }
                 
             //players_board[jumpRow][jumpCol] = blank; // the original square is not blank
-            pieces_board[jumpRow][jumpCol] = null; // the original square is not blank
+            pieces_board[jumpRow][jumpCol] = new CheckersPiece(blank, jumpRow, jumpCol); // the original square is not blank
 
         }
 
@@ -181,7 +180,7 @@ class Data { //Data class begins
 
         /*for (int i = 0; i < 8; i++) {
             for (int k = 0; k < 8; k++) {
-                if(pieces_board[i][k] != null) {
+                if(pieces_board[i][k].getColor() != blank) {
                     System.out.print(pieces_board[i][k].getColor());
                 }else{
                     System.out.print("0");
@@ -198,12 +197,11 @@ class Data { //Data class begins
 
                 //System.out.println("before search moves");
 
-                if(pieces_board[row][col] != null){
+                if(pieces_board[row][col].getColor() != blank){
                     if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){ // if a square belongs to the player
 
                         // check all possible jumps around the piece - if one found the player must jump
                         if (canJump(player, row, col, row+1, col+1, row+2, col+2))
-                            //en lugar de hacer el add, mandarlo a los movimientos posibles de la piece
                             //System.out.println("before addMove piece");
                             pieces_board[row][col].addMove(new movesMade(row, col, row+2, col+2));
                             //System.out.println("paso addMove piece");
@@ -211,10 +209,10 @@ class Data { //Data class begins
                         if (canJump(player, row, col, row-1, col+1, row-2, col+2))
                             pieces_board[row][col].addMove(new movesMade(row, col, row-2, col+2));
                             moves.add(new movesMade(row, col, row-2, col+2));
-                        if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+                        if (canJump(player, row, col, row+1, col-1, row+2, col-2) && pieces_board[row][col].getColor() == playerKing)
                             pieces_board[row][col].addMove(new movesMade(row, col, row+2, col-2));
                             moves.add(new movesMade(row, col, row+2, col-2));
-                        if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+                        if (canJump(player, row, col, row-1, col-1, row-2, col-2) && pieces_board[row][col].getColor() == playerKing)
                             pieces_board[row][col].addMove(new movesMade(row, col, row-2, col-2));
                             moves.add(new movesMade(row, col, row-2, col-2));
                     }
@@ -231,11 +229,11 @@ class Data { //Data class begins
 
                 for (int col = 0; col < 8; col++){
 
-                    if(pieces_board[row][col] != null){
+                    if(pieces_board[row][col].getColor() != blank){
                         if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){ // if a square belongs to the player
 
                             // check all possible normal moves around the piece - if one found, add it to the list
-                            //aquí hacer que la pieza revise si el movimiento es válido o no
+                            //aquÃ­ hacer que la pieza revise si el movimiento es vÃ¡lido o no
                             if (canMove(player,row,col,row+1,col+1))
                                 pieces_board[row][col].addMove(new movesMade(row, col, row+1, col+1));
                                 moves.add(new movesMade(row,col,row+1,col+1));
@@ -291,7 +289,7 @@ class Data { //Data class begins
 
         ArrayList moves = new ArrayList(); //creates a new Array to story legal moves
 
-        if(pieces_board[row][col] != null){
+        if(pieces_board[row][col].getColor() != blank){
             if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){
 
                 //if there is a possible jump, add it to list
@@ -339,25 +337,25 @@ class Data { //Data class begins
         if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) //if destination row or column is off players_board
             return false; //there is no jump, as the destination doesn't exist
 
-        if (pieces_board[r3][c3] != null) //if the destination isn't blank
+        if (pieces_board[r3][c3].getColor() != blank) //if the destination isn't blank
             return false; //there is no jump, as the destination is taken
         
         if (player == player1) { //in the case of player 1
-            if(pieces_board[r1][c1] != null){
+            if(pieces_board[r1][c1].getColor() != blank){
                 if (pieces_board[r1][c1].getColor() == player1 && r3 > r1) //if destination row is greater than the original
                     return false; //there is no jump, as player 1 can only move upwards
             }
-            if(pieces_board[r2][c2] != null){
+            if(pieces_board[r2][c2].getColor() != blank){
                 if (pieces_board[r2][c2].getColor() != player2 && pieces_board[r2][c2].getColor() != playerKing2) //if the middle piece isn't player 2's
                     return false; //there is no jump, as player 1 can't jump his own pieces
             }
             return true; //otherwise, jump is legal
         }else { //in the case of player 2
-            if(pieces_board[r1][c1] != null){
+            if(pieces_board[r1][c1].getColor() != blank){
                 if (pieces_board[r1][c1].getColor() == player2 && r3 < r1) //if destination row is less than the original
                     return false; //there is no jump, as player 2 can only move downwards
             }
-            if(pieces_board[r2][c2] != null){
+            if(pieces_board[r2][c2].getColor() != blank){
                 if (pieces_board[r2][c2].getColor() != player1 && pieces_board[r2][c2].getColor() != playerKing1) //if the middle piece isn't player 1's
                     return false; //there is no jump, as player 2 can't jump his own pieces
             }
@@ -412,17 +410,17 @@ class Data { //Data class begins
         if (r2 < 0 || r2 >= 8 || c2 < 0 || c2 >= 8) //if destination row or column is off board
             return false; //there is no move, as the destination doesn't exist
 
-        if (pieces_board[r2][c2] != null) //if the destination isn't blank
+        if (pieces_board[r2][c2].getColor() != blank) //if the destination isn't blank
             return false; //there is no move, as the destination is taken
 
         if (player == player1) { //in the case of player 1
-            if(pieces_board[r1][c1] != null){
+            if(pieces_board[r1][c1].getColor() != blank){
                 if (pieces_board[r1][c1].getColor() == player1 && r2 > r1) //if destination row is greater than the original
                     return false; //there is no move, as player 1 can only move upwards
             }
             return true; //otherwise, move is legal
         }else { //in the case of player 2
-            if(pieces_board[r1][c1] != null){
+            if(pieces_board[r1][c1].getColor() != blank){
                 if (pieces_board[r1][c1].getColor() == player2 && r2 < r1) //if destination row is less than the original
                     return false; //there is no move, as player 2 can only move downwards
             }
