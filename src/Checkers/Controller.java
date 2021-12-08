@@ -16,7 +16,7 @@ public class Controller implements ActionListener, MouseListener
 {
     private Board board;
     private Data data;
-    private int[][] table;
+    private Pieces[][] table;
     private static final String GAMES_PATH = "saved_games.txt"; 
     private static final String BASE_PATH = "game_";
     public Controller(){}
@@ -34,57 +34,46 @@ public class Controller implements ActionListener, MouseListener
         board.getSave().addActionListener(this);
         board.getLoad().addActionListener(this);
 
-        data.setUpBoard();
+        //data.setUpBoard();
         table = data.getBoard();
-
         newGame();
+        
+        /*
+        for (int i = 0; i < 8; i++) {
+            for (int k = 0; k < 8; k++) {
+                if(table[i][k] != null) {
+                    System.out.print(table[i][k].getColor());
+                }else{
+                    System.out.print("0");
+                }
+            }
+            System.out.println();
+        }*/
+
+        
     }
-    /**
-     * Creates a new game in board and creates a connection with this instance
-     */
+
     private void newGame() {
         board.newGame(table,this);
     }
-    /**
-     * Executes a move in the board
-     * @param move The move to be executed
-     * @return The new board
-     */
-    public int[][] makeMove(movesMade move) {
+    
+    public Pieces[][] makeMove(movesMade move) {
         data.makeMove(move);
         return data.getBoard();
     }
-    /**
-     * Returns the actual board state
-     * @return The board
-     */
-    public int[][] getBoard() {
+    public Pieces[][] getBoard() {
         return data.getBoard();
     }
-    /**
-     * Gets the possible moves of a player
-     * @param player the player to be checked for possible moves
-     * @return An array of possible moves
-     */
+
     public movesMade[] getMovesFrom(int player) {
         movesMade[] result = data.getLegalMoves(player);
+        //System.out.println(result.length);
         return result;
     }
-    /**
-     * Checks if there are any legal jumps to be executed by a player
-     * @param player The player to be checked
-     * @param row The row of the piece to be checked
-     * @param col The col of the piece to be checked
-     * @return A possible array of legal jumps
-     */
+
     public movesMade[] getJumpsFrom(int player,int row, int col) {
         return data.getLegalJumpsFrom(player, row, col);
     }
-    /**
-     * Gets the lost pieces of a player
-     * @param player The player to be checked
-     * @return The pieces that the given player has lost
-     */
     public int getLostPiecesFrom(int player) {
         return data.getLostPieces(player);
     }
@@ -214,7 +203,8 @@ public class Controller implements ActionListener, MouseListener
      * @param filename the game to be loaded
      */
     public void loadGame(String filename){
-        int[][] newBoard = new int[8][8];
+        //int[][] newBoard = new int[8][8];
+        Pieces[][] newBoard = new Pieces[8][8];
         int currentPlayer = -1;
         try{
             FileReader fr = new FileReader(filename);
@@ -223,8 +213,11 @@ public class Controller implements ActionListener, MouseListener
             for(int i = 0; i < 8; i++) {
                 for (int k = 0; k < 8; k++) {
                     int piece = Character.getNumericValue(fr.read());
-                    if(piece != -1){
-                        newBoard[i][k] = piece;
+                    if(piece != -1 || piece != 0){
+                        //newBoard[i][k] = piece;
+                        newBoard[i][k] = new CheckersPiece(piece, i, k);
+                    }else if (piece == 0){
+                        newBoard[i][k] = null;
                     }
                 }
                 fr.read();
@@ -235,6 +228,10 @@ public class Controller implements ActionListener, MouseListener
         } catch(Exception e) {
 
         }
+    }
+
+    public Data getData(){
+        return data;
     }
 
     

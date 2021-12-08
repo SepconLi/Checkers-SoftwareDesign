@@ -9,6 +9,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private boolean gameInProgress; // boolean to check if game is in progress
     private int currentPlayer; // tracks whose turn it is
     private int selectedRow, selectedCol; // tracks which squares have been selected
+    private movesMade[] legalMovesBoard; // declares new movesMade array
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
     private JLabel blackLost; // Lost BLack Pieces
@@ -21,12 +22,17 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private JLabel message; // message JLabel on frame - indicates whose turn it is
     private String Player1; // first player's name
     private String Player2; // second player's name
-    private int[][] board; // matrix that represents the board
+    private Pieces[][] board; // matrix that represents the board
     private Controller control; // controller 
 
     public Board() { // default constructor
-
+        System.out.println("Bob construye");
         // assigns all JLabels and JButtons to their values, as well as styles them
+        this.board = new Pieces[8][8];
+        if(board != null){
+            System.out.println("Bob construyó");
+        }
+        
         title = new JLabel("Checkers!");
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -40,7 +46,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         blackLost = new JLabel("",JLabel.CENTER);
         whiteLost = new JLabel("",JLabel.CENTER);
         message.setFont(new Font("Serif", Font.BOLD, 14));
-        blackLost.setFont(new Font("Serif",Font.BOLD,28))
+        blackLost.setFont(new Font("Serif",Font.BOLD,28));
         whiteLost.setFont(new Font("Serif",Font.BOLD,28));
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.darkGray);
@@ -133,9 +139,19 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * creates new game
      * 
      */
-    public void newGame(int[][] newBoard, Controller control) {
+    public void newGame(Pieces[][] newBoard, Controller control) {
         this.control = control;
-        board = newBoard;
+        board = newBoard;//falla porque newBoard no existe
+        for (int i = 0; i < 8; i++) {
+            for (int k = 0; k < 8; k++) {
+                if(board[i][k] != null) {
+                    System.out.print(board[i][k].getColor());
+                }else{
+                    System.out.print("0");
+                }
+            }
+            System.out.println();
+        }
         currentPlayer = Data.player1; // indicates its player 1's move
         legalMoves = control.getMovesFrom(Data.player1);
         selectedRow = -1; // no square is selected
@@ -154,7 +170,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @param currentPlayer The current player's turn on the saved game
      * @param board The status of the board of the saved game
      */
-    public void loadGame(int currentPlayer, int[][] newBoard){
+    public void loadGame(int currentPlayer, Pieces[][] newBoard){
         this.currentPlayer = currentPlayer;
         this.board = newBoard;
         whiteLost.setText("x" + control.getLostPiecesFrom(Data.player1));
@@ -264,10 +280,13 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      * @param row row to be checked
      * @param col column to be checked
      */
-    public void clickedSquare(int row, int col) {
-
-        for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
-            if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) { // if selected piece can be moved
+    public void clickedSquare(int row, int col) { // falta esto
+        
+        //legalMoves = board[row][col].getPossibleMoves();
+        //legalMoves = control.getData().getLegalMoves();
+        for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves, está sus (por ahora no se ocupa)
+            if (legalMoves [i].getFromRow() == row && legalMoves [i].getFromCol() == col) {
+            //if (legalMoves[i].getFromRow() == row && legalMoves[i].getFromCol() == col) { // if selected piece can be moved
                 selectedRow = row; // assigns selected row
                 selectedCol = col; // assigns selected column
                 if (currentPlayer == Data.player1) // indicates whose turn it is
@@ -284,12 +303,18 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
             return;
         }
 
+        //legalMoves = board[row][col].getPossibleMoves();//no encuentra possible moves
+        //legalMoves = control.getData().getLegalMoves();
+        //aquí validamos?
+        //este indice de legalMoves va a estar raro por el index
         for (int i = 0; i < legalMoves.length; i++) { // runs through all legal moves
-            if (legalMoves[i].getFromRow() == selectedRow && legalMoves[i].getFromCol() == selectedCol // if already selected
+            if (legalMoves [i].getFromRow() == selectedRow && legalMoves [i].getFromCol() == selectedCol
+            //if (legalMoves[i].getFromRow() == selectedRow && legalMoves[i].getFromCol() == selectedCol // if already selected(reviso legalMoves de la tabla?)
                                                                                              // piece can move
-                    && legalMoves[i].getToRow() == row && legalMoves[i].getToCol() == col) { // and the selected piece's
+                    // no sirve&& pieces_board[row][col].legalMoves[i].getToRow() == row && pieces_board[row][col].legalMoves[i].getToCol() == col) { 
+                    && legalMoves [i].getToRow() == row && legalMoves [i].getToCol() == col) { // and the selected piece's(reviso legalMoves de la pieza?)
                                                                                    // destination is legal
-                makeMove(legalMoves[i]); // make the move
+                makeMove(legalMoves [i]); // make the move
                 return;
             }
         }
@@ -378,7 +403,12 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
         game_info = currentPlayer + "\n";
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                game_info += board[row][col];
+                if(board[row][col].getColor() == 0){
+                    game_info += 0;
+                }else{
+                    game_info += board[row][col].getColor(); 
+                }
+                
             }
             game_info += "\n";
         }
@@ -391,6 +421,7 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
      */
     public void paintComponent(Graphics g) {
         if(gameInProgress){
+            //board = new Pieces[8][8];
         // boarder around game board
             g.setColor(new Color(139, 119, 101));
             g.fillRect(0, 0, 648, 648);
@@ -411,28 +442,37 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
                     g.fillRect(4 + col * 80, 4 + row * 80, 80, 80);
 
                     // paints squares with pieces on them
-                    switch (board[row][col]) {
-                    case Data.player1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                        break;
-                    case Data.player2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                        break;
-                    case Data.playerKing1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                        g.setColor(Color.white);
-                        g.drawString("K", 54 + col * 80, 72 + row * 80);
-                        break;
-                    case Data.playerKing2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
-                        g.setColor(Color.white);
-                        g.drawString("K", 54 + col * 80, 72 + row * 80);
-                        break;
+                    int color = 0;
+                    if(board[row][col] == null){//no reconoce los legalMoves bien
+                        color = 0;
+                    }else{
+                        color = board[row][col].getColor();
                     }
+                    //if(board[row][col] != null){//aquí cae
+                        switch (color) {//pieces_board[row][col].getColor(), hacer todo el switch en pieces TODO
+                            case Data.player1:
+                                g.setColor(Color.lightGray);
+                                g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                                break;
+                            case Data.player2:
+                                g.setColor(Color.darkGray);
+                                g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                                break;
+                            case Data.playerKing1:
+                                g.setColor(Color.lightGray);
+                                g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                                g.setColor(Color.white);
+                                g.drawString("K", 54 + col * 80, 72 + row * 80);
+                                break;
+                            case Data.playerKing2:
+                                g.setColor(Color.darkGray);
+                                g.fillOval(8 + col * 80, 8 + row * 80, 72, 72);
+                                g.setColor(Color.white);
+                                g.drawString("K", 54 + col * 80, 72 + row * 80);
+                                break;
+                            }
+                    //}
+                    
                 }
             }
         }
