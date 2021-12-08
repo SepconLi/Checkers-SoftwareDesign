@@ -110,12 +110,12 @@ class Data { //Data class begins
      * @param toRow new row to be moved
      * @param toCol new column to be moved
      */
-    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {//aquÃ­ muevo piece?
+    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {//aquÃƒÂ­ muevo piece?
 
         //players_board[toRow][toCol] = players_board[fromRow][fromCol]; // piece that was in original square is now in new square
         //players_board[fromRow][fromCol] = blank; // the original square is now blank
         pieces_board[toRow][toCol] = pieces_board[fromRow][fromCol]; // piece that was in original square is now in new square
-        pieces_board[fromRow][fromCol] = new CheckersPiece(blank, fromRow, fromCol); // the original square is now blank(ocupamos algo para esto) no sÃ© si sirve
+        pieces_board[fromRow][fromCol] = new CheckersPiece(blank, fromRow, fromCol); // the original square is now blank(ocupamos algo para esto) no sÃƒÂ© si sirve
 
         if (fromRow - toRow == 2 || fromRow - toRow == -2){ // if a move is a jump
 
@@ -201,20 +201,24 @@ class Data { //Data class begins
                     if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){ // if a square belongs to the player
 
                         // check all possible jumps around the piece - if one found the player must jump
-                        if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+                        if (canJump(player, row, col, row+1, col+1, row+2, col+2)){
                             //System.out.println("before addMove piece");
                             pieces_board[row][col].addMove(new movesMade(row, col, row+2, col+2));
                             //System.out.println("paso addMove piece");
                             moves.add(new movesMade(row, col, row+2, col+2));
-                        if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+                        }
+                        if (canJump(player, row, col, row-1, col+1, row-2, col+2)){
                             pieces_board[row][col].addMove(new movesMade(row, col, row-2, col+2));
                             moves.add(new movesMade(row, col, row-2, col+2));
-                        if (canJump(player, row, col, row+1, col-1, row+2, col-2) && pieces_board[row][col].getColor() == playerKing)
+                        }
+                        if (canJump(player, row, col, row+1, col-1, row+2, col-2)){
                             pieces_board[row][col].addMove(new movesMade(row, col, row+2, col-2));
                             moves.add(new movesMade(row, col, row+2, col-2));
-                        if (canJump(player, row, col, row-1, col-1, row-2, col-2) && pieces_board[row][col].getColor() == playerKing)
+                        }
+                        if (canJump(player, row, col, row-1, col-1, row-2, col-2)){
                             pieces_board[row][col].addMove(new movesMade(row, col, row-2, col-2));
                             moves.add(new movesMade(row, col, row-2, col-2));
+                        }
                     }
                 }
 
@@ -233,20 +237,23 @@ class Data { //Data class begins
                         if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){ // if a square belongs to the player
 
                             // check all possible normal moves around the piece - if one found, add it to the list
-                            //aquÃ­ hacer que la pieza revise si el movimiento es vÃ¡lido o no
-                            if (canMove(player,row,col,row+1,col+1))
+                            //aquÃƒÂ­ hacer que la pieza revise si el movimiento es vÃƒÂ¡lido o no
+                            if (canMove(player,row,col,row+1,col+1)) {
                                 pieces_board[row][col].addMove(new movesMade(row, col, row+1, col+1));
                                 moves.add(new movesMade(row,col,row+1,col+1));
-                            if (canMove(player,row,col,row-1,col+1))
+                            }
+                            if (canMove(player,row,col,row-1,col+1)){
                                 pieces_board[row][col].addMove(new movesMade(row, col, row-1, col+1));
                                 moves.add(new movesMade(row,col,row-1,col+1));
-                            if (canMove(player,row,col,row+1,col-1))
+                            }
+                            if (canMove(player,row,col,row+1,col-1)){
                                 pieces_board[row][col].addMove(new movesMade(row, col, row+1, col-1));
                                 moves.add(new movesMade(row,col,row+1,col-1));
-                            if (canMove(player,row,col,row-1,col-1))
+                            }
+                            if (canMove(player,row,col,row-1,col-1)){
                                 pieces_board[row][col].addMove(new movesMade(row, col, row-1, col-1));
                                 moves.add(new movesMade(row,col,row-1,col-1));
-    
+                            }
                         }
                     }
                 }
@@ -293,19 +300,22 @@ class Data { //Data class begins
             if (pieces_board[row][col].getColor() == player || pieces_board[row][col].getColor() == playerKing){
 
                 //if there is a possible jump, add it to list
-                if (canJump(player, row, col, row+1, col+1, row+2, col+2))
+                if (canJump(player, row, col, row+1, col+1, row+2, col+2)){
                     pieces_board[row][col].addMove(new movesMade(row, col, row+2, col+2));
                     moves.add(new movesMade(row, col, row+2, col+2));
-                if (canJump(player, row, col, row-1, col+1, row-2, col+2))
+                }
+                if (canJump(player, row, col, row-1, col+1, row-2, col+2)){
                     pieces_board[row][col].addMove(new movesMade(row, col, row-2, col+2));
                     moves.add(new movesMade(row, col, row-2, col+2));
-                if (canJump(player, row, col, row+1, col-1, row+2, col-2))
+                }
+                if (canJump(player, row, col, row+1, col-1, row+2, col-2)){
                     pieces_board[row][col].addMove(new movesMade(row, col, row+2, col-2));
                     moves.add(new movesMade(row, col, row+2, col-2));
-                if (canJump(player, row, col, row-1, col-1, row-2, col-2))
+                }
+                if (canJump(player, row, col, row-1, col-1, row-2, col-2)){
                     pieces_board[row][col].addMove(new movesMade(row, col, row-2, col-2));
                     moves.add(new movesMade(row, col, row-2, col-2));
-    
+                }
             }
         }
 
@@ -334,34 +344,59 @@ class Data { //Data class begins
      */
     private boolean canJump(int player, int r1, int c1, int r2, int c2, int r3, int c3){
 
-        if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8) //if destination row or column is off players_board
+        if (r3 < 0 || r3 >= 8 || c3 < 0 || c3 >= 8){ //if destination row or column is off players_board
             return false; //there is no jump, as the destination doesn't exist
-
-        if (pieces_board[r3][c3].getColor() != blank) //if the destination isn't blank
+        }
+        if (pieces_board[r3][c3].getColor() != blank){ //if the destination isn't blank
             return false; //there is no jump, as the destination is taken
-        
-        if (player == player1) { //in the case of player 1
-            if(pieces_board[r1][c1].getColor() != blank){
-                if (pieces_board[r1][c1].getColor() == player1 && r3 > r1) //if destination row is greater than the original
-                    return false; //there is no jump, as player 1 can only move upwards
-            }
-            if(pieces_board[r2][c2].getColor() != blank){
-                if (pieces_board[r2][c2].getColor() != player2 && pieces_board[r2][c2].getColor() != playerKing2) //if the middle piece isn't player 2's
-                    return false; //there is no jump, as player 1 can't jump his own pieces
-            }
-            return true; //otherwise, jump is legal
-        }else { //in the case of player 2
-            if(pieces_board[r1][c1].getColor() != blank){
-                if (pieces_board[r1][c1].getColor() == player2 && r3 < r1) //if destination row is less than the original
-                    return false; //there is no jump, as player 2 can only move downwards
-            }
-            if(pieces_board[r2][c2].getColor() != blank){
-                if (pieces_board[r2][c2].getColor() != player1 && pieces_board[r2][c2].getColor() != playerKing1) //if the middle piece isn't player 1's
-                    return false; //there is no jump, as player 2 can't jump his own pieces
-            }
-            return true; //otherwise, jump is legal
         }
 
+        if(pieces_board[r2][c2].getColor() == blank) {
+            return false;
+        }
+        
+        if (player == player1) { //in the case of player 1
+
+            if(pieces_board[r1][c1].getColor() == player1 && r3 < r1){
+
+                if(pieces_board[r2][c2].getColor() == player2 || pieces_board[r2][c2].getColor() == playerKing2){
+                    return true;
+                }
+            } else {
+                if(pieces_board[r1][c1].getColor() == playerKing1) {
+                    if(pieces_board[r2][c2].getColor() == player2 || pieces_board[r2][c2].getColor() == playerKing2){
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+            /*
+            if (pieces_board[r1][c1].getColor() == player1 && r3 > r1){ //if destination row is greater than the original
+                return false;
+            } //there is no jump, as player 1 can only move upwards
+            
+                if(pieces_board[r2][c2].getColor() != blank){
+            player2 && pieces_board[r2][c2].getColor() != playerKing2){ //if the middle piece isn't player 2's
+                return false;
+                    }//there is no jump, as player 1 can't jump his own pieces
+                            return true; //otherwise, jump is legal
+      */      //in the case of player 2
+            else{
+                if(pieces_board[r1][c1].getColor() == player2 && r3 > r1){
+                    if(pieces_board[r2][c2].getColor() == player1 || pieces_board[r2][c2].getColor() == playerKing1){
+                        return true;
+                    }
+            } else {
+                if(pieces_board[r1][c1].getColor() == playerKing2) {
+                    if(pieces_board[r2][c2].getColor() == player1 || pieces_board[r2][c2].getColor() == playerKing1){
+                        return true;
+                    }
+                }
+            }
+                return false;
+        }
     }
     /**
      * Returns the board's current status
@@ -428,5 +463,4 @@ class Data { //Data class begins
         }
 
     }
-
 }
