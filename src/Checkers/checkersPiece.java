@@ -15,7 +15,9 @@ class CheckersPiece extends Pieces {
         //data = d;
         newMoves();
     }
-
+    /**
+     * Return possible moves for a Checkers piece
+     */
     @Override public movesMade[] getPossibleMoves(){//ver como arreglar esto para que sea eficiente
         if (moves.size() == 0){ // if there are no normal moves
             return null;
@@ -28,19 +30,29 @@ class CheckersPiece extends Pieces {
         }
         
     }
-
+    /**
+     * Returns if a piece is a king
+     * @param k the king value
+     */
     public void setKing(int k){
         king = k;
     }
-
+    /**
+     * Returns the piece's king status
+     * @return a king status
+     */
     public int getKing(){
         return king;
     }
-
+    /**
+     * Generates the moves
+     */
     public void newMoves(){
         moves =  new ArrayList();
     }
-
+    /**
+     * Add a move to the @moves array
+     */
     @Override public void addMove(movesMade move){
         moves.add(move);
     }

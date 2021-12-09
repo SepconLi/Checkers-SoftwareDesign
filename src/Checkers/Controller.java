@@ -41,51 +41,42 @@ public class Controller implements ActionListener, MouseListener
         board.getLoad().addActionListener(this);
 
         newGame();
-        
-        /*
-        for (int i = 0; i < 8; i++) {
-            for (int k = 0; k < 8; k++) {
-                if(table[i][k] != null) {
-                    System.out.print(table[i][k].getColor());
-                }else{
-                    System.out.print("0");
-                }
-            }
-            System.out.println();
-        }*/
-
-        
+    
     }
+    /**
+     * Gets the total number of players
+     * @return The number of players
+     */
     public int getNoOfPlayers() {
         return boardType.getNoOfPlayers();
     }
     
     /**
-     * 
+     * Creates a new game
      */
     private void newGame() {
         board.newGame(table,this);
     }
     /**
-     * 
-     * @param move
-     * @return
+     * Makes a move creating a communication between Visual and intern data
+     * @param move The move to be executed
+     * @return The modified board
      */
     public Pieces[][] makeMove(movesMade move) {
         data.makeMove(move);
         return data.getBoard();
     }
     /**
-     * 
-     * @return
+     * Gets the actual state of the board
+     * @return The actual board
      */
     public Pieces[][] getBoard() {
         return data.getBoard();
     }
     /**
-     * 
-     * @param player
-     * @return
+     * Gets the legal possible moves for a specific player
+     * @param player The player to have its moves calculated
+     * @return An array of moves that are legal for the given player
      */
     public movesMade[] getMovesFrom(int player) {
         movesMade[] result = data.getLegalMoves(player);
@@ -93,19 +84,19 @@ public class Controller implements ActionListener, MouseListener
         return result;
     }
     /**
-     * 
-     * @param player
-     * @param row
-     * @param col
-     * @return
+     * Gets the legal Jumps for a specific player (Special move that removes opposite player piece)
+     * @param player The piece whose jumps are going to be calculated 
+     * @param row The row of the piece to be checked
+     * @param col The col of the piecce to be checked
+     * @return An array of jumps that the player can possibly do
      */
     public movesMade[] getJumpsFrom(int player,int row, int col) {
         return data.getLegalJumpsFrom(player, row, col);
     }
     /**
-     * 
-     * @param player
-     * @return
+     * Communicates visual with data to calculate how many pieces a player has lost
+     * @param player The player whose lost pieces are going to be calculated
+     * @return The total pieces that the given player has lost
      */
     public int getLostPiecesFrom(int player) {
         return data.getLostPieces(player);
@@ -123,7 +114,7 @@ public class Controller implements ActionListener, MouseListener
             data.setUpBoard();
             board.newGame(data.getBoard(),this);
         }else if (src == board.getHowToPlay()) {//if howToPlay button is pressed, instructions pop up
-            board.instructions(Data.CHECKERS_INSTRUCTIONS);
+            board.instructions(boardType.getInstructions());
         }else if (src == board.getCredits()){ //if credits button is pressed, credits pop up
             board.showCredits();
         }else if (src == board.getSave()) {
@@ -237,32 +228,15 @@ public class Controller implements ActionListener, MouseListener
      */
     public void loadGame(String filename){
         //int[][] newBoard = new int[8][8];
-        Pieces[][] newBoard = new Pieces[8][8];
-        int currentPlayer = -1;
-        try{
-            FileReader fr = new FileReader(filename);
-            currentPlayer = Character.getNumericValue(fr.read());
-            fr.read();
-            for(int i = 0; i < 8; i++) {
-                for (int k = 0; k < 8; k++) {
-                    int piece = Character.getNumericValue(fr.read());
-                    if(piece != -1 || piece != 0){
-                        //newBoard[i][k] = piece;
-                        newBoard[i][k] = new CheckersPiece(piece, i, k);
-                    }else if (piece == 0){
-                        newBoard[i][k] = null;
-                    }
-                }
-                fr.read();
-            }
-            fr.close();
-            data.loadBoard(newBoard);
-            this.board.loadGame(currentPlayer, newBoard);
-        } catch(Exception e) {
-
-        }
+        Pieces[][] newBoard = boardType.loadBoard(filename);
+        int currentPlayer = boardType.getPlayer();
+        data.loadBoard(newBoard);
+        this.board.loadGame(currentPlayer, newBoard);
     }
-
+    /**
+     * Returns an instance of data
+     * @return an instance of data that is being used
+     */
     public Data getData(){
         return data;
     }
