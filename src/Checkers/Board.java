@@ -9,7 +9,6 @@ public class Board extends JPanel{ // Board class beings, extends on JPanel clas
     private boolean gameInProgress; // boolean to check if game is in progress
     private int currentPlayer; // tracks whose turn it is
     private int selectedRow, selectedCol; // tracks which squares have been selected
-    private movesMade[] legalMovesBoard; // declares new movesMade array
     private movesMade[] legalMoves; // declares new movesMade array
     private JLabel title; // title JLabel on frame
     private JLabel blackLost; // Lost BLack Pieces
