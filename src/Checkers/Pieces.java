@@ -1,6 +1,6 @@
 package Checkers;
 
-public class Pieces{
+abstract class Pieces{
 
     int color;
     char type ;
@@ -53,15 +53,11 @@ public class Pieces{
      * Returns the possible moves for the piece
      * @return the possible moves for the piece
      */
-    public movesMade[] getPossibleMoves(){
-        return possibleMoves;
-    }
+    abstract movesMade[] getPossibleMoves();
     /**
      * Adds a move for the piece
      * @param move The move to be added
      */
-    public void addMove(movesMade move){
-        
-    }
+    abstract void addMove(movesMade move);
     
 }

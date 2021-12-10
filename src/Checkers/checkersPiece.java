@@ -53,7 +53,8 @@ class CheckersPiece extends Pieces {
     /**
      * Add a move to the @moves array
      */
-    @Override public void addMove(movesMade move){
+    @Override 
+    void addMove(movesMade move){
         moves.add(move);
     }
 
